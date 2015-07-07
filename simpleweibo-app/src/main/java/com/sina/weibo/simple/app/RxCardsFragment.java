@@ -50,6 +50,7 @@ import rx.android.app.*;
 import rx.android.view.ViewObservable;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 
 public class RxCardsFragment extends Fragment {
     @InjectView(R.id.list)
@@ -136,6 +137,8 @@ public class RxCardsFragment extends Fragment {
         TextView text1;
         @InjectView(R.id.message)
         TextView message;
+        @InjectView(R.id.imageCard)
+        CardView imageCard;
         @InjectView(R.id.image)
         ImageView image;
         @InjectView(R.id.comments)
@@ -210,8 +213,10 @@ public class RxCardsFragment extends Fragment {
                 .subscribe(s -> message.setText(s));
 
             image.setVisibility(View.GONE);
+            imageCard.setVisibility(View.GONE);
             ViewObservable.bindView(image, item.image).filter(url -> !android.text.TextUtils.isEmpty(url)).subscribe(url -> {
                 image.setVisibility(View.VISIBLE);
+                imageCard.setVisibility(View.VISIBLE);
                 Glide.with(itemView.getContext())
                     .load(url)
                     .fitCenter()

@@ -71,6 +71,7 @@
                 app:cardElevation="3dp"
                 android:elevation="3dp"
                 app:cardCornerRadius="3dp"
+                android:id="@+id/imageCard"
                 >
                 <ImageView
                     android:layout_width="match_parent"

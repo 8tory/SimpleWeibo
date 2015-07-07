@@ -136,38 +136,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAdapter(Adapter adapter) {
-        adapter.fragments.add(FragmentPage.create().title("Timeline").fragment(() -> {
+        adapter.fragments.add(FragmentPage.create().title("Home").fragment(() -> {
             return RxCardsFragment.create()
-                .items(getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user.avatar_large);
                     card.text1 = Observable.just(status.user.screen_name);
                     card.message = Observable.just(status.text);
                     card.image = Observable.just(status.original_pic);
                     return card;
-                }));
+                })));
         }));
-        adapter.fragments.add(FragmentPage.create().title("Timeline").fragment(() -> {
+        adapter.fragments.add(FragmentPage.create().title("Notifications").fragment(() -> {
             return RxCardsFragment.create()
-                .items(getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user.avatar_large);
                     card.text1 = Observable.just(status.user.screen_name);
                     card.message = Observable.just(status.text);
                     card.image = Observable.just(status.original_pic);
                     return card;
-                }));
+                })));
         }));
-        adapter.fragments.add(FragmentPage.create().title("Timeline").fragment(() -> {
+        adapter.fragments.add(FragmentPage.create().title("Discover").fragment(() -> {
             return RxCardsFragment.create()
-                .items(getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user.avatar_large);
                     card.text1 = Observable.just(status.user.screen_name);
                     card.message = Observable.just(status.text);
                     card.image = Observable.just(status.original_pic);
                     return card;
-                }));
+                })));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("Me").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(status.user.avatar_large);
+                    card.text1 = Observable.just(status.user.screen_name);
+                    card.message = Observable.just(status.text);
+                    card.image = Observable.just(status.original_pic);
+                    return card;
+                })));
         }));
     }
 
