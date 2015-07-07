@@ -1,5 +1,7 @@
 # RetroWeibo
 
+![](art/RetroWeibo.png)
+
 Retrofit Weibo SDK.
 
 RetroWeibo turns Weibo API into a Java interface with RxJava.
