@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,31 +41,23 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.*;
 
 import rx.android.app.*;
 
-import retrofacebook.*;
-import android.support.v4.widget.SwipeRefreshLayout;
-
-public class CardsFragment extends Fragment {
-    @InjectView(R.id.list)
+public class ListFragment extends Fragment {
     RecyclerView listView;
-    @InjectView(R.id.refresh)
-    SwipeRefreshLayout refreshView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_swipe, container, false);
-        ButterKnife.inject(this, view);
+        listView = (RecyclerView) inflater.inflate(R.layout.fragment_list, container, false);
 
         listAdapter = ListRecyclerAdapter.create();
-        listAdapter.createViewHolder(new Func2<ViewGroup, Integer, CardViewHolder>() {
+        listAdapter.createViewHolder(new Func2<ViewGroup, Integer, ItemViewHolder>() {
             @Override
-            public CardViewHolder call(ViewGroup parent, Integer position) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
+            public ItemViewHolder call(ViewGroup parent, Integer position) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
 
                 /*
                 TypedValue typedValue = new TypedValue();
@@ -73,86 +65,58 @@ public class CardsFragment extends Fragment {
                 view.setBackgroundResource(typedValue.resourceId);
                 */
 
-                return new CardViewHolder(view);
+                return new ItemViewHolder(view);
             }
         });
-
         listView.setLayoutManager(new LinearLayoutManager(listView.getContext()));
         listView.setAdapter(listAdapter);
 
-        refreshView.setOnRefreshListener(() -> {
-            load();
-        });
-
-        return view;
+        return listView;
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser) {
-            load();
+            items.toList().subscribe(list -> {
+                listAdapter.getList().clear();
+                listAdapter.getList().addAll(list);
+                listAdapter.notifyDataSetChanged();
+            });
         }
     }
 
-    public Subscription load() {
-        refreshView.setRefreshing(true);
-        return AppObservable.bindFragment(CardsFragment.this, items).toList().subscribe(list -> {
-            android.util.Log.d("RetroFacebook", "list: " + list);
-            android.util.Log.d("RetroFacebook", "list.size(): " + list.size());
-            listAdapter.getList().clear();
-            listAdapter.getList().addAll(list);
-            listAdapter.notifyDataSetChanged();
-        }, e -> {}, () -> {
-            refreshView.setRefreshing(false);
-        });
-    }
+    private ListRecyclerAdapter<Item, ItemViewHolder> listAdapter;
+    Observable<Item> items;
 
-
-    private ListRecyclerAdapter<Card, CardViewHolder> listAdapter;
-    Observable<Card> items;
-
-    public CardsFragment items(Observable<Card> items) {
+    public ListFragment items(Observable<Item> items) {
         this.items = items;
-
         return this;
     }
 
-    public static CardsFragment create() {
-        return new CardsFragment();
+    public static ListFragment create() {
+        return new ListFragment();
     }
 
-    public static class CardViewHolder extends BindViewHolder<Card> {
+    public static class ItemViewHolder extends BindViewHolder<Item> {
         @InjectView(R.id.icon)
         ImageView icon;
         @InjectView(R.id.text1)
         TextView text1;
-        @InjectView(R.id.message)
-        TextView message;
-        @InjectView(R.id.image)
-        ImageView image;
 
-        public CardViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
         };
 
         @Override
-        public void onBind(int position, Card item) {
+        public void onBind(int position, Item item) {
             if (!android.text.TextUtils.isEmpty(item.text1())) text1.setText(item.text1());
-            if (!android.text.TextUtils.isEmpty(item.message())) message.setText(item.message());
 
             if (!android.text.TextUtils.isEmpty(item.icon())) {
                 Glide.with(itemView.getContext())
                     .load(item.icon())
                     .fitCenter()
                     .into(icon);
-            }
-
-            if (!android.text.TextUtils.isEmpty(item.image())) {
-                Glide.with(itemView.getContext())
-                    .load(item.image())
-                    .fitCenter()
-                    .into(image);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {

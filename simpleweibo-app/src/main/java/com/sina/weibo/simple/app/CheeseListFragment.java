@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -44,8 +44,6 @@ import rx.Observable;
 import rx.functions.*;
 
 import rx.android.app.*;
-
-import retrofacebook.*;
 
 public class CheeseListFragment extends Fragment {
 

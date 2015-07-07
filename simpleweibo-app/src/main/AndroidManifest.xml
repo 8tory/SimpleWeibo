@@ -16,10 +16,13 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="retrofacebook.app">
+    package="com.sina.weibo.simple.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -37,19 +40,18 @@
 
         <activity android:name=".CheeseDetailActivity" />
 
-        <!-- Facebook {{{ -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
+        <activity android:name=".WBAuthActivity" />
+        <activity android:name=".WBAuthCodeActivity" />
+        <activity android:name=".WBShareMainActivity" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-            "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+        <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" >
+        </activity>
 
-        <!--<provider android:authorities="com.facebook.app.FacebookContentProvider875877299126816"-->
-            <!--android:name="com.facebook.FacebookContentProvider"-->
-            <!--android:exported="true" />-->
-        <!-- Facebook }}} -->
+        <service android:name="com.sina.weibo.sdk.net.DownloadService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

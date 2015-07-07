@@ -1,5 +1,7 @@
 # SimpleWeibo
 
+![](art/SimpleWeibo.png)
+
 Simple Weibo SDK using [RetroWeibo](https://github.com/8tory/RetroWeibo) turns Weibo API into a Java interface with RxJava.
 
 ## Usage

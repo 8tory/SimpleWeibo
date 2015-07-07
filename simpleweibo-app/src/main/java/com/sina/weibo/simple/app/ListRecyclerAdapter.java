@@ -1,4 +1,4 @@
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import android.view.View;
 import android.view.ViewGroup;

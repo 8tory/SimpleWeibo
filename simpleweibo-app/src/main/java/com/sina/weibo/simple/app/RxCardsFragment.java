@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +49,6 @@ import rx.subjects.*;
 import rx.android.app.*;
 import rx.android.view.ViewObservable;
 
-import retrofacebook.*;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 public class RxCardsFragment extends Fragment {
@@ -156,11 +155,10 @@ public class RxCardsFragment extends Fragment {
         @InjectView(R.id.send)
         ImageView sendView;
 
-        ListRecyclerAdapter<Comment, CommentViewHolder> commentsAdapter;
+        ListRecyclerAdapter<String, CommentViewHolder> commentsAdapter;
         boolean liked;
         int likeCount;
         int commentCount;
-        User meUser;
 
         public CardViewHolder(View itemView) {
             super(itemView);
@@ -227,99 +225,19 @@ public class RxCardsFragment extends Fragment {
                 likeCountView.setText("" + likeCount);
             });
 
-            commentCount = 0;
-            commentCountView.setText("" + commentCount); // clear
-            ViewObservable.bindView(commentCountView, item.commentCount).subscribe(i -> {
-                commentCount = i;
-                commentCountView.setText("" + commentCount);
-            });
-
             liked = false;
             likeView.setOnClickListener(v -> {}); // clear
             Glide.with(itemView.getContext())
                 .load(R.drawable.ic_thumb_up_outline)
                 .fitCenter()
                 .into(likeView);
-            ViewObservable.bindView(likeView, item.liked).subscribe(b -> {
-                liked = b;
-                android.util.Log.d("RetroFacebook", "liked: " + liked);
-                if (liked) {
-                    Glide.with(itemView.getContext())
-                        .load(R.drawable.ic_thumb_up)
-                        .fitCenter()
-                        .into(likeView);
-                } else {
-                    Glide.with(itemView.getContext())
-                        .load(R.drawable.ic_thumb_up_outline)
-                        .fitCenter()
-                        .into(likeView);
-                }
-
-                likeView.setOnClickListener(v -> {
-                    liked = !liked;
-
-                    android.util.Log.d("RetroFacebook", "be liked: " + liked);
-
-                    if (liked) {
-                        android.util.Log.d("RetroFacebook", "like");
-                        likeCount += 1;
-                        Glide.with(itemView.getContext())
-                            .load(R.drawable.ic_thumb_up)
-                            .fitCenter()
-                            .into(likeView);
-                        item.like.subscribe();
-                    } else {
-                        android.util.Log.d("RetroFacebook", "unlike");
-                        likeCount -= 1;
-                        Glide.with(itemView.getContext())
-                            .load(R.drawable.ic_thumb_up_outline)
-                            .fitCenter()
-                            .into(likeView);
-                        item.unlike.subscribe();
-                    }
-
-                    likeCountView.setText("" + likeCount);
-                });
-            });
 
             commentsView.setVisibility(View.GONE);
             commentsAdapter.getList().clear();
-            ViewObservable.bindView(commentsView, item.comments).toList().subscribe(list -> {
-                    commentsAdapter.getList().addAll(list);
-                    commentsAdapter.notifyDataSetChanged();
-                    commentsView.setVisibility(View.VISIBLE);
-                });
-
-            meUser = null;
-            ViewObservable.bindView(commentAvatar, Facebook.get().me()).subscribe(me -> {
-                meUser = me;
-                Glide.with(commentAvatar.getContext())
-                    .load("http://graph.facebook.com/" + me.id() + "/picture?width=400&height=400")
-                    .fitCenter()
-                    .into(commentAvatar);
-            });
-
-            sendView.setOnClickListener(v -> {
-                if (meUser != null) {
-                    final String commentText = commentEdit.getText().toString();
-                    commentEdit.setText("");
-                    item.comment(commentText).subscribe(struct -> {
-                        Comment comment = Comment.builder()
-                            .id(struct.id())
-                            .message(commentText)
-                            .from(meUser)
-                            .likeCount(0)
-                            .userLikes(false)
-                            .build();
-                        commentsAdapter.getList().add(comment);
-                        commentsAdapter.notifyItemInserted(commentsAdapter.getItemCount() - 1);
-                    });
-                }
-            });
         }
     }
 
-    public static class CommentViewHolder extends BindViewHolder<Comment> {
+    public static class CommentViewHolder extends BindViewHolder<String> {
         @InjectView(R.id.icon)
         ImageView icon;
         @InjectView(R.id.text1)
@@ -338,53 +256,7 @@ public class RxCardsFragment extends Fragment {
         int likeCount;
 
         @Override
-        public void onBind(int position, Comment item) {
-            android.util.Log.d("RetroFacebook", "comment: " + item);
-            android.util.Log.d("RetroFacebook", "comment: " + item.message());
-
-            Glide.with(itemView.getContext())
-                .load("http://graph.facebook.com/" + item.from().id() + "/picture?width=400&height=400")
-                .fitCenter()
-                .into(icon);
-            text1.setText(item.message());
-
-            likeCount = item.likeCount();
-            likes.setText("" + likeCount);
-
-            liked = item.userLikes();
-            if (liked) {
-                Glide.with(itemView.getContext())
-                    .load(R.drawable.ic_thumb_up)
-                    .fitCenter()
-                    .into(likeView);
-            } else {
-                Glide.with(itemView.getContext())
-                    .load(R.drawable.ic_thumb_up_outline)
-                    .fitCenter()
-                    .into(likeView);
-            }
-
-            likeView.setOnClickListener(v -> {
-                liked = !liked;
-
-                if (liked) {
-                    likeCount += 1;
-                    Glide.with(itemView.getContext())
-                        .load(R.drawable.ic_thumb_up)
-                        .fitCenter()
-                        .into(likeView);
-                    item.like().subscribe(s -> {}, e -> {});
-                } else {
-                    likeCount -= 1;
-                    Glide.with(itemView.getContext())
-                        .load(R.drawable.ic_thumb_up_outline)
-                        .fitCenter()
-                        .into(likeView);
-                    item.unlike().subscribe(s -> {}, e -> {});
-                }
-                likes.setText("" + likeCount);
-            });
-
+        public void onBind(int position, String item) {
         }
     }
 }

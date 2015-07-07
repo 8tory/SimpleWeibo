@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import java.util.Random;
 

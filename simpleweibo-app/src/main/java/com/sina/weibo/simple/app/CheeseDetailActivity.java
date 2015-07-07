@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,8 +36,6 @@ import rx.Observable;
 import rx.functions.*;
 
 import rx.android.app.*;
-
-import retrofacebook.*;
 
 import java.util.Arrays;
 import android.support.v7.widget.RecyclerView;

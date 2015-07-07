@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package retrofacebook.app;
+package com.sina.weibo.simple.app;
 
-import auto.parcel.AutoParcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-@AutoParcel
-public abstract class Item implements Parcelable {
+import rx.Observable;
+import rx.functions.*;
+
+public class RxCard {
     @Nullable
-    public abstract String icon();
+    public Observable<String> icon = Observable.empty();
     @Nullable
-    public abstract String text1();
-
-    @AutoParcel.Builder
-    public abstract static class Builder {
-        public abstract Builder icon(String s);
-        public abstract Builder text1(String s);
-        public abstract Item build();
-    }
-
-    public static Builder builder() {
-        return new AutoParcel_Item.Builder();
-    }
-
-    public abstract Builder toBuilder();
+    public Observable<String> text1 = Observable.empty();
+    @Nullable
+    public Observable<String> message = Observable.empty();
+    @Nullable
+    public Observable<String> image = Observable.empty();
+    @Nullable
+    public Observable<Boolean> liked = Observable.empty();
+    @Nullable
+    public Observable<Integer> likeCount = Observable.empty();
 }
