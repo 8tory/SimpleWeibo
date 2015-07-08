@@ -26,6 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
         exclude 'META-INF/LICENSE'
@@ -34,6 +35,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'LICENSE'
         exclude 'LICENSE.txt'
+        exclude '.readme'
     }
 
     defaultConfig {
