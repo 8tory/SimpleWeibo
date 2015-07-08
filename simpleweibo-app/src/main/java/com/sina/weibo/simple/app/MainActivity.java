@@ -54,7 +54,7 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
-//import com.sina.weibo.simple.*;
+import com.sina.weibo.simple.*;
 
 import butterknife.InjectView;
 import butterknife.ButterKnife;
@@ -66,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
-    private AuthInfo mAuthInfo;
     private Oauth2AccessToken mAccessToken;
-    private SsoHandler mSsoHandler;
+    private SimpleWeibo mWeibo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +106,11 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        mAuthInfo = new AuthInfo(this, getString(R.string.weibo_app_key), getString(R.string.weibo_app_redirect_url), getString(R.string.weibo_app_scope));
-        mSsoHandler = new SsoHandler(this, mAuthInfo);
-        mSsoHandler.authorize(new AuthListener());
+        mWeibo = SimpleWeibo.create(this);
+        mWeibo.logIn().subscribe(token -> {
+            mAccessToken = new Oauth2AccessToken();
+            mAccessToken.setToken(token.token());
+        });
     }
 
     @Override
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             return Observable.empty();
         }
         return Observable.<List<Status>>create(obs -> {
-            StatusesAPI statusesAPI = new StatusesAPI(this, getString(R.string.weibo_app_key),
+            StatusesAPI statusesAPI = new StatusesAPI(this, mWeibo.getAppId(),
                     mAccessToken);
             statusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
                 @Override
@@ -282,33 +283,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mSsoHandler != null) {
-            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
-    }
-
-    class AuthListener implements WeiboAuthListener {
-        @Override
-        public void onComplete(Bundle values) {
-            mAccessToken = Oauth2AccessToken.parseAccessToken(values);
-            if (!mAccessToken.isSessionValid()) {
-                String code = values.getString("code");
-                String message = "Session is invalid." + "\nObtained the code: " + code;
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-                mAccessToken = null;
-            }
-        }
-
-        @Override
-        public void onCancel() {
-            Toast.makeText(MainActivity.this,
-                   "Auth cancel", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onWeiboException(WeiboException e) {
-            Toast.makeText(MainActivity.this,
-                    "Auth exception : " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        mWeibo.onActivityResult(requestCode, resultCode, data);
     }
 }

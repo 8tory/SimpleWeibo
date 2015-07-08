@@ -40,18 +40,17 @@
 
         <activity android:name=".CheeseDetailActivity" />
 
-        <activity android:name=".WBAuthActivity" />
-        <activity android:name=".WBAuthCodeActivity" />
-        <activity android:name=".WBShareMainActivity" />
-
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false" >
-        </activity>
+            android:exported="false" />
 
         <service android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <meta-data android:name="com.sina.weibo.sdk.ApplicationId" android:value="@string/weibo_app_id" />
+        <meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" />
+
     </application>
 
 </manifest>
