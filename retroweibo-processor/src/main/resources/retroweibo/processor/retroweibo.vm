@@ -1,0 +1,455 @@
+## Template for each generated RetroWeibo_Foo class.
+## This template uses the Apache Velocity Template Language (VTL).
+## The variables ($pkg, $props, and so on) are defined by the fields of MutableRetroWeiboTemplateVars.
+##
+## Comments, like this one, begin with ##. The comment text extends up to and including the newline
+## character at the end of the line. So comments also serve to join a line to the next one.
+## Velocity deletes a newline after a directive (#if, #foreach, #end etc) so ## is not needed there.
+## That does mean that we sometimes need an extra blank line after such a directive.
+##
+## A post-processing step will remove unwanted spaces and blank lines, but will not join two lines.
+
+#if (!$pkg.empty)
+package $pkg;
+#end
+
+#foreach ($i in $imports)
+import $i;
+#end
+
+import org.json.JSONObject;
+import org.json.JSONException;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.*;
+
+import rx.android.app.*;
+
+import com.bluelinelabs.logansquare.LoganSquare;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
+import android.app.Activity;
+
+${gwtCompatibleAnnotation}
+public final class $subclass$formalTypes extends $origClass$actualTypes {
+
+## Constructor
+
+  public $subclass() {
+    super();
+  }
+
+  public $subclass(Activity activity) {
+    this();
+    this.activity = activity;
+
+    //WeiboSdk.sdkInitialize(activity.getApplicationContext());
+  }
+
+  Activity activity;
+
+## Property getters
+
+#foreach ($p in $props)
+
+    @Override
+    ${p.access}${p.type} ${p.getter}(${p.args}) {
+
+#if ($p.permissions.isEmpty())
+
+        final List<String> permissions = Collections.emptyList();
+
+#else
+
+        final List<String> permissions = Arrays.asList(
+#foreach ($permission in $p.permissions)
+
+            "$permission" #if ($foreach.hasNext) , #end
+#end      );
+#end
+
+#if ($p.callback)
+
+        Observable<$p.callbackType> obs =
+
+#else
+        ${p.type} obs =
+
+#end
+
+        AppObservable.bindActivity(activity, Observable.defer(new Func0<Observable<LoginResult>>() {
+            @Override public Observable<LoginResult> call() {
+                return logInWithPermissions(permissions);
+            }
+        }).map(new Func1<LoginResult, Bundle>() {
+            @Override public Bundle call(LoginResult s) {
+            android.util.Log.d("RetroWeibo", "bundle");
+#set ($map = ${p.queries})
+#set ($maps = ${p.queryMaps})
+#set ($bundles = ${p.queryBundles})
+#if (!$map.isEmpty() || !$maps.isEmpty() || !$bundles.isEmpty())
+
+                Bundle bundle = new Bundle();
+
+#foreach ($query in $map.entrySet())
+
+                bundle.putString($query.key, $query.value);
+
+#end
+#foreach ($queryMap in $maps)
+
+                addMapToBundle(bundle, ${queryMap});
+
+#end
+#foreach ($queryBundle in $bundles)
+
+                bundle.putAll(${queryBundle});
+
+#end
+
+                return bundle;
+
+#elseif ($p.post)
+
+#if (!$p.body.empty)
+
+                return ${p.body}.toBundle();
+
+#else
+
+                return null;
+
+#end
+
+#else
+
+                return null;
+#end
+            }
+        }).flatMap(new Func1<Bundle, Observable<GraphResponse>>() {
+            @Override public Observable<GraphResponse> call(Bundle queries) {
+
+#if ($p.get)
+
+                android.util.Log.d("RetroWeibo", "graphRequest GET");
+                GraphRequest request = GraphRequest.newGraphPathRequest(
+                        AccessToken.getCurrentAccessToken(), ${p.path}, null);
+
+#elseif ($p.post)
+
+                GraphRequest request = GraphRequest.newPostRequest(
+                        AccessToken.getCurrentAccessToken(), ${p.path}, null, null);
+
+#elseif ($p.delete)
+
+                GraphRequest request = GraphRequest.newDeleteObjectRequest(
+                        AccessToken.getCurrentAccessToken(), ${p.path}, null);
+
+#end
+
+                if (queries != null) request.setParameters(queries);
+                return Observable.create(new OnSubscribeGraphResponse(request));
+            }
+        }).flatMap(new Func1<GraphResponse, Observable<$p.typeArgs>>() {
+            @Override public Observable<${p.typeArgs}> call(GraphResponse response) {
+                // TODO check "data" field to determine parse group or item.
+                ${p.typeArgs}s group = null;
+                try {
+                    Log.d("RetroWeibo", "${p.typeArgs}s: " + response.getJSONObject().toString());
+                    group = LoganSquare.parse(response.getJSONObject().toString(), AutoJson_${p.typeArgs}s.class);
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                    return Observable.empty();
+                }
+
+                if (group != null && group.data() != null) return Observable.from(group.data());
+
+                try {
+                return Observable.<${p.typeArgs}>just(LoganSquare.parse(response.getJSONObject().toString(), AutoJson_${p.typeArgs}.class));
+                } catch (java.io.IOException e) {
+                    return Observable.empty();
+                }
+            }
+        }).filter(new Func1<${p.typeArgs}, Boolean>() {
+            @Override public Boolean call(${p.typeArgs} item) {
+                return item != null;
+            }
+        }));
+
+#if ($p.callback)
+
+        obs.toList().subscribe(new Action1<List<$p.callbackType>>() {
+                @Override public void call(List<$p.callbackType> list) {
+                    ${p.callbackArg}.onCompleted(list);
+                }
+            }, new Action1<Throwable>() {
+                @Override public void call(Throwable e) {
+                    ${p.callbackArg}.onError(e);
+                }
+            });
+#else
+
+        return obs;
+
+#end
+    }
+
+#end
+
+    public static <T> T cast(Object o) {
+        return (T) o;
+    }
+
+    public class OnSubscribeGraphResponse implements Observable.OnSubscribe<GraphResponse> {
+        public GraphRequest request;
+
+        public OnSubscribeGraphResponse(GraphRequest request) {
+            this.request = request;
+        }
+
+        @Override
+        public void call(final Subscriber<? super GraphResponse> sub) {
+            Log.d("RetroWeibo", "onSubscribe");
+            if (request != null) {
+                request.setCallback(new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        try {
+                            WeiboRequestError requestError = response.getError();
+                            WeiboException exception = (requestError == null) ? null : requestError.getException();
+
+                            /* move into Observable.map()
+                            if (response.getJSONObject() == null && exception == null) {
+                                exception = new WeiboException("GraphObjectPagingLoader received neither a result nor an error.");
+                            }
+                            */
+
+                            if (exception != null) {
+                                sub.onError(exception);
+                            } else {
+                                sub.onNext(response);
+                                request = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+
+                                if (request != null) {
+                                    Log.d("RetroWeibo", "hasNext");
+                                    call(sub);
+                                } else {
+                                    Log.d("RetroWeibo", "end");
+                                    sub.onCompleted();
+                                }
+                            }
+                        } catch (Throwable e) {
+                            sub.onError(e);
+                        }
+                    }
+                });
+
+                GraphRequest.executeBatchAsync(new GraphRequestBatch(request));
+            } else {
+                sub.onCompleted();
+            }
+        }
+    }
+
+    private static void addMapToBundle(Bundle bundle, Map<String, String> map) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            bundle.putString(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static final String PUBLISH_PERMISSION_PREFIX = "publish";
+    public static final String MANAGE_PERMISSION_PREFIX = "manage";
+
+    @SuppressWarnings("serial")
+    private static final Set<String> OTHER_PUBLISH_PERMISSIONS = new HashSet<String>() {{
+        add("ads_management");
+        add("create_event");
+        add("rsvp_event");
+    }};
+
+    public static boolean hasPublishPermission() {
+        return hasPublishPermission(AccessToken.getCurrentAccessToken() != null ? AccessToken.getCurrentAccessToken().getPermissions() : Collections.<String>emptyList());
+    }
+
+    public static boolean hasPublishPermission(Collection<String> permissions) {
+        for (String permission : permissions) {
+            if (isPublishPermission(permission)) return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isPublishPermission(String permission) {
+        return (permission.startsWith(PUBLISH_PERMISSION_PREFIX) ||
+             permission.startsWith(MANAGE_PERMISSION_PREFIX) ||
+             OTHER_PUBLISH_PERMISSIONS.contains(permission));
+    }
+
+    public static boolean hasReadPermission() {
+        if (AccessToken.getCurrentAccessToken() == null) return false;
+        if (AccessToken.getCurrentAccessToken().getPermissions() == null) return false;
+        if (AccessToken.getCurrentAccessToken().getPermissions().isEmpty()) return false;
+
+        return !hasPublishPermission();
+    }
+
+    public static boolean hasReadPermission(Collection<String> permissions) {
+        if (AccessToken.getCurrentAccessToken() == null) return false;
+        if (AccessToken.getCurrentAccessToken().getPermissions() == null) return false;
+        if (AccessToken.getCurrentAccessToken().getPermissions().isEmpty()) return false;
+
+        return !hasPublishPermission(permissions);
+    }
+
+    public static boolean isReadPermission(String permission) {
+        return !isPublishPermission(permission);
+    }
+
+    public static List<String> filterActivePermissions(Collection<String> permissions) {
+        List<String> newPermissions = new ArrayList<String>(permissions);
+        if (newPermissions == null) return newPermissions;
+        if (newPermissions.isEmpty()) return newPermissions;
+        if (AccessToken.getCurrentAccessToken() == null) return newPermissions;
+
+        List<String> activePermissions = new ArrayList<String>(AccessToken.getCurrentAccessToken().getPermissions());
+        newPermissions.removeAll(activePermissions);
+        for (String permission : newPermissions) {
+            android.util.Log.d("RetroWeibo", "new: " +  permission);
+        }
+        return newPermissions;
+    }
+
+    public static List<String> filterReadPermissions(final Collection<String> permissions) {
+        List<String> readPermissions = new ArrayList<String>(permissions);
+        for (String permission : readPermissions) {
+            android.util.Log.d("RetroWeibo", "before read: " + permission);
+            if (!isReadPermission(permission)) readPermissions.remove(permission);
+        }
+        for (String permission : readPermissions) {
+            android.util.Log.d("RetroWeibo", "after read: " + permission);
+        }
+        return readPermissions;
+    }
+
+    public static List<String> filterPublishPermissions(final Collection<String> permissions) {
+        List<String> publishPermissions = new ArrayList<String>(permissions);
+        for (String permission : publishPermissions) {
+            android.util.Log.d("RetroWeibo", "before pub: " + permission);
+            if (!isPublishPermission(permission)) publishPermissions.remove(permission);
+        }
+
+        for (String permission : publishPermissions) {
+            android.util.Log.d("RetroWeibo", "after pub: " + permission);
+        }
+        return publishPermissions;
+    }
+
+    public Observable<LoginResult> logInWithPermissions(final Collection<String> permissions) {
+        for (String permission : permissions) {
+            android.util.Log.d("RetroWeibo", "request: " + permission);
+        }
+        return logInWithReadPermissions(permissions)
+            .flatMap(new Func1<LoginResult, Observable<LoginResult>>() {
+                @Override public Observable<LoginResult> call(LoginResult login) {
+                    return logInWithPublishPermissions(permissions);
+                }
+            });
+    }
+
+    public Observable<LoginResult> logInWithReadPermissions(final Collection<String> permissions) {
+        return Observable.from(permissions).filter(new Func1<String, Boolean>() {
+                @Override public Boolean call(final String permission) {
+                    return isReadPermission(permission);
+                }
+            }).toList().map(new Func1<List<String>, List<String>>() {
+                @Override public List<String> call(final List<String> readPermissions) {
+                    return filterActivePermissions(readPermissions);
+                }
+            }).flatMap(new Func1<List<String>, Observable<LoginResult>>() {
+                @Override public Observable<LoginResult> call(final List<String> readPermissions) {
+                    return logInWithPermissions(readPermissions, true);
+                }
+            });
+    }
+
+    public Observable<LoginResult> logInWithPublishPermissions(final Collection<String> permissions) {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return logInWithReadPermissions(Arrays.asList("public_profile"))
+                .flatMap(new Func1<LoginResult, Observable<LoginResult>>() {
+                    @Override public Observable<LoginResult> call(LoginResult login) {
+                        return logInWithPublishPermissions(permissions);
+                    }
+                });
+        }
+        return Observable.from(permissions).filter(new Func1<String, Boolean>() {
+                @Override public Boolean call(final String permission) {
+                    return isPublishPermission(permission);
+                }
+            }).toList().map(new Func1<List<String>, List<String>>() {
+                @Override public List<String> call(final List<String> publishPermissions) {
+                    return filterActivePermissions(publishPermissions);
+                }
+            }).flatMap(new Func1<List<String>, Observable<LoginResult>>() {
+                @Override public Observable<LoginResult> call(final List<String> publishPermissions) {
+                    return logInWithPermissions(publishPermissions, false);
+                }
+            });
+    }
+
+    public Observable<LoginResult> logInWithPermissions(final Collection<String> permissions, final boolean readable) {
+        for (String permission : permissions) {
+            android.util.Log.d("RetroWeibo", "request new: " + permission);
+        }
+        return Observable.create(new Observable.OnSubscribe<LoginResult>() {
+            @Override public void call(final Subscriber<? super LoginResult> sub) {
+                if (permissions == null || permissions.isEmpty()) {
+                    if (AccessToken.getCurrentAccessToken() != null) {
+                        android.util.Log.d("RetroWeibo", "no new permissions");
+                        sub.onNext(new LoginResult(AccessToken.getCurrentAccessToken(), AccessToken.getCurrentAccessToken().getPermissions(), AccessToken.getCurrentAccessToken().getDeclinedPermissions()));
+                        sub.onCompleted();
+                        return;
+                    } else {
+                        android.util.Log.d("RetroWeibo", "logIn: null");
+                        sub.onNext(null);
+                        sub.onCompleted();
+                        return;
+                    }
+                }
+                LoginManager.getInstance().registerCallback(callbackManager, new WeiboCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        android.util.Log.d("RetroWeibo", "onSuccess");
+                        sub.onNext(loginResult);
+                        sub.onCompleted();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        android.util.Log.d("RetroWeibo", "onCancel");
+                        sub.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(WeiboException error) {
+                        android.util.Log.d("RetroWeibo", "error");
+                        sub.onError(error);
+                    }
+                });
+
+                if (readable) LoginManager.getInstance().logInWithReadPermissions(activity, permissions);
+                else LoginManager.getInstance().logInWithPublishPermissions(activity, permissions);
+            }
+        });
+    }
+}
