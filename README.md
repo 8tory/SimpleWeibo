@@ -15,8 +15,8 @@ My posts:
 ```java
 weibo = SimpleWeibo.create(activity);
 
-Observable<Post> myPosts = weibo.getPosts();
-myPosts.take(100).forEach(System.out::println);
+Observable<Status> myStatuses = weibo.getStatuses();
+myStatuses.take(10).forEach(System.out::println);
 ```
 
 logIn (default permissions):
@@ -61,11 +61,37 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 ## Add API using RetroWeibo
 
+[SimpleWeibo.java](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java):
+
 ```java
-@RetroWeibo
-abstract class Weibo {
-    @GET("/statuses/user_timeline.json")
-    abstract Observable<Post> getPosts();
+    @GET("/statuses/friends_timeline.json")
+    public abstract Observable<Status> getStatuses(
+        @Query("since_id") String sinceId,
+        @Query("max_id") String maxId,
+        @Query("count") String count,
+        @Query("page") String page,
+        @Query("base_app") String baseApp,
+        @Query("trim_user") String trimUser,
+        @Query("feature") String featureType
+    );
+
+    public Observable<Status> getStatuses() {
+        return getStatuses("0", "0", "24", "1", "0", "0", "0");
+    }
+```
+
+Add Model: [Status.java](simpleweibo/src/main/java/com/sina/weibo/simple/Status.java):
+
+```java
+@AutoJson
+public abstract class Status implements android.os.Parcelable {
+    @Nullable
+    @AutoJson.Field(name = "created_at")
+    public abstract String createdAt();
+    @Nullable
+    @AutoJson.Field
+    public abstract String id();
+    // ...
 }
 ```
 
