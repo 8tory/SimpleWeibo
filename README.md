@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/8tory/SimpleWeibo.svg)](https://travis-ci.org/8tory/SimpleWeibo)
 
+[![](https://avatars0.githubusercontent.com/u/5761889?v=3&s=48)](https://github.com/Wendly)
+[![](https://avatars3.githubusercontent.com/u/213736?v=3&s=48)](https://github.com/yongjhih)
+Contributors..
+
 ![](art/SimpleWeibo.png)
 
 Simple Weibo SDK turns Weibo API into a Java interface with RxJava.
