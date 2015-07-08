@@ -54,6 +54,10 @@ public class SimpleWeibo {
         return this;
     }
 
+    public String getAppId() {
+        return appId;
+    }
+
     public Observable<AccessToken> logIn() {
         return logInWithPermissions(Arrays.asList(
             "email",
