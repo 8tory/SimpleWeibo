@@ -62,6 +62,7 @@ public abstract class SimpleWeibo {
     private String redirectUrl;
     private SsoHandler ssoHandler;
     private static SimpleWeibo self;
+    private AccessToken accessToken;
 
     public static final String APPLICATION_ID_PROPERTY = "com.sina.weibo.sdk.ApplicationId";
     public static final String REDIRECT_URL_PROPERTY = "com.sina.weibo.sdk.RedirectUrl";
@@ -101,8 +102,6 @@ public abstract class SimpleWeibo {
             "invitation_write"
         ));
     }
-
-    AccessToken accessToken;
 
     public Observable<AccessToken> logInWithPermissions(Collection<String> permissions) {
         if (accessToken == null) accessToken = AccessTokenPreferences.create(context);
