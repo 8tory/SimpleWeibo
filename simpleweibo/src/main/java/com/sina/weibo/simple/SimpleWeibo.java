@@ -59,7 +59,7 @@ public class SimpleWeibo {
     }
 
     public Observable<AccessToken> logIn() {
-        return logInWithPermissions(Arrays.asList(
+        return logInWithPermissions(new ArrayList(Arrays.asList(
             "email",
             "direct_messages_read",
             "direct_messages_write",
@@ -68,7 +68,7 @@ public class SimpleWeibo {
             "statuses_to_me_read",
             "follow_app_official_microblog",
             "invitation_write"
-        ));
+        )));
     }
 
     AccessToken accessToken;
@@ -131,9 +131,8 @@ public class SimpleWeibo {
         return !TextUtils.isEmpty(accessToken.token()); // TODO && isExpired(accessToken)
     }
 
-    public static boolean hasNewPermissions(AccessToken accessToken, Collection<String> permissions) {
-        List<String> newPermissions = new ArrayList<>(accessToken.permissions());
-        newPermissions.remove(permissions);
+    public static boolean hasNewPermissions(AccessToken accessToken, Collection<String> newPermissions) {
+        newPermissions.removeAll(accessToken.permissions());
         return !newPermissions.isEmpty();
     }
 
