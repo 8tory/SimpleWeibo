@@ -19,6 +19,13 @@ Observable<Post> myPosts = weibo.getPosts();
 myPosts.take(100).forEach(System.out::println);
 ```
 
+## Integration
+
+```xml
+<meta-data android:name="com.sina.weibo.sdk.ApplicationId" android:value="@string/weibo_app_id" />
+<meta-data android:name="com.sina.weibo.sdk.RequestUrl" android:value="@string/weibo_request_url" />
+```
+
 ## See Also
 
 * http://open.weibo.com/wiki/
