@@ -6,6 +6,8 @@
 
 Simple Weibo SDK turns Weibo API into a Java interface with RxJava.
 
+[#Demo](#demo)
+
 ![](art/screenshot-timeline.png)
 
 ## Usage
@@ -95,7 +97,11 @@ public abstract class Status implements android.os.Parcelable {
 }
 ```
 
-Sample code: [MainActivity.java](simpleweibo-app/src/main/java/com/sina/weibo/simple/app/MainActivity.java)
+## Demo
+
+* Sample code: [MainActivity.java](simpleweibo-app/src/main/java/com/sina/weibo/simple/app/MainActivity.java)
+* apk: https://github.com/8tory/SimpleWeibo/releases/download/1.0.0/simpleweibo-app-debug.apk
+
 ## Installation
 
 via jitpack:
