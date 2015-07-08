@@ -95,6 +95,7 @@ public abstract class Status implements android.os.Parcelable {
 }
 ```
 
+Sample code: [MainActivity.java](simpleweibo-app/src/main/java/com/sina/weibo/simple/app/MainActivity.java)
 ## Installation
 
 via jitpack:
