@@ -94,6 +94,11 @@ public class SimpleWeibo {
     public Observable<Oauth2AccessToken> logInForOauth2AccessToken(Collection<String> permissions) {
         return logInForBundle(permissions).map(bundle -> {
             return Oauth2AccessToken.parseAccessToken(bundle);
+        }).flatMap(oauth2 -> {
+            if (!oauth2.isSessionValid()) {
+                return Observable.error(new WeiboException("AccessToken is invalid"));
+            }
+            return Observable.just(oauth2);
         });
     }
 
