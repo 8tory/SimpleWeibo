@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2015 8tory, Inc.
  * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,28 +46,15 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.*;
 
-import com.sina.weibo.sdk.auth.AuthInfo;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.auth.sso.SsoHandler;
-import com.sina.weibo.sdk.auth.WeiboAuthListener;
-import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.net.RequestListener;
-import com.sina.weibo.sdk.openapi.StatusesAPI;
-import com.sina.weibo.sdk.openapi.models.Status;
-import com.sina.weibo.sdk.openapi.models.StatusList;
 import com.sina.weibo.simple.*;
 
 import butterknife.InjectView;
 import butterknife.ButterKnife;
 
-/**
- * TODO
- */
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
-    private Oauth2AccessToken mAccessToken;
     private SimpleWeibo mWeibo;
 
     @Override
@@ -107,10 +95,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         mWeibo = SimpleWeibo.create(this);
-        mWeibo.logIn().subscribe(token -> {
-            mAccessToken = new Oauth2AccessToken();
-            mAccessToken.setToken(token.token());
-        });
+        mWeibo.logIn().subscribe();
     }
 
     @Override
@@ -139,34 +124,34 @@ public class MainActivity extends AppCompatActivity {
     private void setupAdapter(Adapter adapter) {
         adapter.fragments.add(FragmentPage.create().title("Home").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
                     RxCard card = new RxCard();
-                    card.icon = Observable.just(status.user.avatar_large);
-                    card.text1 = Observable.just(status.user.screen_name);
-                    card.message = Observable.just(status.text);
-                    card.image = Observable.just(status.original_pic);
+                    card.icon = Observable.just(status.user().avatarLarge());
+                    card.text1 = Observable.just(status.user().screenName());
+                    card.message = Observable.just(status.text());
+                    card.image = Observable.just(status.originalPic());
                     return card;
                 })));
         }));
         adapter.fragments.add(FragmentPage.create().title("Notifications").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
                     RxCard card = new RxCard();
-                    card.icon = Observable.just(status.user.avatar_large);
-                    card.text1 = Observable.just(status.user.screen_name);
-                    card.message = Observable.just(status.text);
-                    card.image = Observable.just(status.original_pic);
+                    card.icon = Observable.just(status.user().avatarLarge());
+                    card.text1 = Observable.just(status.user().screenName());
+                    card.message = Observable.just(status.text());
+                    card.image = Observable.just(status.originalPic());
                     return card;
                 })));
         }));
         adapter.fragments.add(FragmentPage.create().title("Discover").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> getFriendsTimeline().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
                     RxCard card = new RxCard();
-                    card.icon = Observable.just(status.user.avatar_large);
-                    card.text1 = Observable.just(status.user.screen_name);
-                    card.message = Observable.just(status.text);
-                    card.image = Observable.just(status.original_pic);
+                    card.icon = Observable.just(status.user().avatarLarge());
+                    card.text1 = Observable.just(status.user().screenName());
+                    card.message = Observable.just(status.text());
+                    card.image = Observable.just(status.originalPic());
                     return card;
                 })));
         }));
@@ -181,33 +166,6 @@ public class MainActivity extends AppCompatActivity {
                     return card;
                 })));
         }));
-    }
-
-    private Observable<Status> getFriendsTimeline() {
-        if (mAccessToken == null) {
-            return Observable.empty();
-        }
-        return Observable.<List<Status>>create(obs -> {
-            StatusesAPI statusesAPI = new StatusesAPI(this, mWeibo.getAppId(),
-                    mAccessToken);
-            statusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
-                @Override
-                public void onComplete(String response) {
-                    if (!TextUtils.isEmpty(response)) {
-                        StatusList statuses = StatusList.parse(response);
-                        if ((statuses != null) && (statuses.statusList != null)) {
-                            obs.onNext(statuses.statusList);
-                        }
-                    }
-                    obs.onCompleted();
-                }
-
-                @Override
-                public void onWeiboException(WeiboException e) {
-                    obs.onError(e);
-                }
-            });
-        }).flatMap(l -> Observable.from(l));
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
