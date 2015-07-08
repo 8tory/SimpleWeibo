@@ -4,7 +4,7 @@
 
 ![](art/SimpleWeibo.png)
 
-Simple Weibo SDK using [RetroWeibo](https://github.com/8tory/RetroWeibo) turns Weibo API into a Java interface with RxJava.
+Simple Weibo SDK turns Weibo API into a Java interface with RxJava.
 
 ![](art/screenshot-timeline.png)
 
@@ -56,6 +56,16 @@ protected void onCreate(Bundle savedInstanceState) {
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     weibo.onActivityResult(requestCode, resultCode, data);
+}
+```
+
+## Add API using RetroWeibo
+
+```java
+@RetroWeibo
+abstract class Weibo {
+    @GET("/statuses/user_timeline.json")
+    abstract Observable<Post> getPosts();
 }
 ```
 
