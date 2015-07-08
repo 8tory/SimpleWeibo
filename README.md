@@ -1,5 +1,7 @@
 # RetroWeibo
 
+[![Build Status](https://travis-ci.org/8tory/RetroWeibo.svg)](https://travis-ci.org/8tory/RetroWeibo)
+
 ![](art/RetroWeibo.png)
 
 Retrofit Weibo SDK.
