@@ -21,22 +21,37 @@ import android.content.pm.ApplicationInfo;
 
 import rx.Observable;
 
-public class Weibo {
-    Activity activity;
-    Context context;
-    String appId;
-    String redirectUrl;
-    SsoHandler ssoHandler;
+public class SimpleWeibo {
+    private Activity activity;
+    private Context context;
+    private String appId;
+    private String redirectUrl;
+    private SsoHandler ssoHandler;
+    private static SimpleWeibo self;
+
     public static final String APPLICATION_ID_PROPERTY = "com.sina.weibo.sdk.ApplicationId";
     public static final String REDIRECT_URL_PROPERTY = "com.sina.weibo.sdk.RedirectUrl";
 
-    public Weibo(Activity activity) {
+    public static SimpleWeibo get() {
+        return self;
+    }
+
+    public static SimpleWeibo create(Activity activity) {
+        self = new SimpleWeibo(activity).initialize(activity);
+        return self;
+    }
+
+    private SimpleWeibo(Activity activity) {
+    }
+
+    public SimpleWeibo initialize(Activity activity) {
         this.activity = activity;
         this.context = activity;
         this.appId = getMetaData(activity, APPLICATION_ID_PROPERTY);
         this.redirectUrl = getMetaData(activity, REDIRECT_URL_PROPERTY);
         // null ? throw new IllegalArgumentException()
         ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl, TextUtils.join(",", Arrays.asList("email"))));
+        return this;
     }
 
     public Observable<AccessToken> logIn() {
@@ -61,9 +76,10 @@ public class Weibo {
             if (!hasNewPermissions(accessToken, permissions)) {
                 return Observable.just(accessToken);
             }
-            ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl, TextUtils.join(",", permissions)));
         }
 
+        ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl,
+                TextUtils.join(",", permissions)));
         return logInForOauth2AccessToken(permissions).map(oauth2 -> {
             accessToken.uid(oauth2.getUid());
             accessToken.token(oauth2.getToken());
