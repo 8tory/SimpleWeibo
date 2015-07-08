@@ -6,12 +6,13 @@ sourceCompatibility = '1.7'
 
 repositories {
     jcenter()
+    maven { url 'https://dl.bintray.com/8tory/maven/' }
     maven { url 'https://dl.bintray.com/yongjhih/maven/' }
 }
 
 dependencies {
-  compile project(':retroweibo-annotation')
-  //compile 'com.infstory:retroweibo-annotation:1.0.0'
+  compile project(':retroweibo')
+  //compile 'com.infstory:retroweibo:1.0.0'
   compile 'com.google.auto.service:auto-service:1.0-rc2'
   compile 'com.google.code.findbugs:jsr305:2.0.3'
   compile 'org.apache.velocity:velocity:1.7'

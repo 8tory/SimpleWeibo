@@ -1,4 +1,4 @@
-include 'retroweibo-annotation'
+include 'retroweibo'
 include 'retroweibo-processor'
 include 'simpleweibo'
 include 'simpleweibo-app'

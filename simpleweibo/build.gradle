@@ -66,4 +66,9 @@ dependencies {
     apt 'de.devland.esperandro:esperandro:2.2.0'
 
     compile 'com.infstory:proguard-snippets:1.0.0'
+
+    compile 'com.infstory:auto-json:1.0.1'
+    apt 'com.infstory:auto-json-processor:1.0.1'
+    compile project(':retroweibo')
+    apt project(':retroweibo-processor')
 }
