@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 8tory, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sina.weibo.simple;
 
 import java.util.Set;
@@ -21,7 +36,26 @@ import android.content.pm.ApplicationInfo;
 
 import rx.Observable;
 
-public class SimpleWeibo {
+import retroweibo.RetroWeibo;
+
+@RetroWeibo
+public abstract class SimpleWeibo {
+
+    @RetroWeibo.GET("/statuses/friends_timeline.json")
+    public abstract Observable<Status> getStatuses(
+        @RetroWeibo.Query("since_id") String sinceId,
+        @RetroWeibo.Query("max_id") String maxId,
+        @RetroWeibo.Query("count") String count,
+        @RetroWeibo.Query("page") String page,
+        @RetroWeibo.Query("base_app") String baseApp,
+        @RetroWeibo.Query("trim_user") String trimUser,
+        @RetroWeibo.Query("feature") String featureType
+    );
+
+    public Observable<Status> getStatuses() {
+        return getStatuses("0", "0", "24", "1", "0", "0", "0");
+    }
+
     private Activity activity;
     private Context context;
     private String appId;
@@ -37,11 +71,8 @@ public class SimpleWeibo {
     }
 
     public static SimpleWeibo create(Activity activity) {
-        self = new SimpleWeibo(activity).initialize(activity);
+        self = new RetroWeibo_SimpleWeibo(activity).initialize(activity);
         return self;
-    }
-
-    private SimpleWeibo(Activity activity) {
     }
 
     public SimpleWeibo initialize(Activity activity) {

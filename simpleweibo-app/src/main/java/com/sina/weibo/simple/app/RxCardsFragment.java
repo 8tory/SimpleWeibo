@@ -107,8 +107,8 @@ public class RxCardsFragment extends Fragment {
     public Subscription load() {
         if (refreshView != null) refreshView.setRefreshing(true);
         return AppObservable.bindFragment(RxCardsFragment.this, items).toList().subscribe(list -> {
-            android.util.Log.d("RetroFacebook", "list: " + list);
-            android.util.Log.d("RetroFacebook", "list.size(): " + list.size());
+            android.util.Log.d("RetroWeibo", "list: " + list);
+            android.util.Log.d("RetroWeibo", "list.size(): " + list.size());
             listAdapter.getList().clear();
             listAdapter.getList().addAll(list);
             listAdapter.notifyDataSetChanged();
