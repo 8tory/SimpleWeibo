@@ -1,1 +1,2 @@
+include 'simpleweibo'
 include 'simpleweibo-app'
