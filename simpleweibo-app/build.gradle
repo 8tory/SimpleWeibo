@@ -103,15 +103,5 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.6.1'
     compile 'com.infstory:proguard-snippets:1.0.0'
 
-    //compile project(':weibo-android-sdk')
-    compile 'com.github.8tory:weibo-android-sdk:7ed5886949'
     compile project(':simpleweibo')
 }
-
-/*
-retrolambda {
-    jdk System.getenv("JAVA8_HOME")
-    oldJdk System.getenv("JAVA7_HOME")
-    javaVersion JavaVersion.VERSION_1_7
-}
-*/
