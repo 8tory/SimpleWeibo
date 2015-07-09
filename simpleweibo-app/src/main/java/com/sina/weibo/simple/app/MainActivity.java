@@ -157,14 +157,14 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Me").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getMentions().map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
                     card.message = Observable.just(status.text());
                     card.image = Observable.just(status.originalPic());
                     return card;
-                })));
+                })).doOnError(e -> e.printStackTrace()));
         }));
     }
 

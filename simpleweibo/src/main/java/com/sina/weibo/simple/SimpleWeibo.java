@@ -53,7 +53,39 @@ public abstract class SimpleWeibo {
     );
 
     public Observable<Status> getStatuses() {
-        return getStatuses(0L, 0L, 24, 1, false, false, 0);
+        return getStatuses(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            NOT_APP_ONLY,
+            NOT_TRIM_USER,
+            FEATURE_ALL
+        );
+    }
+
+    @RetroWeibo.GET("/mentions.json")
+    public abstract Observable<Status> getMentions(
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
+        @RetroWeibo.Query("filter_by_source") int filterBySource,
+        @RetroWeibo.Query("filter_by_type") int filterByType,
+        @RetroWeibo.Query("trim_user") boolean trimUser
+    );
+
+    public Observable<Status> getMentions() {
+        return getMentions(UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            AUTHOR_FILTER_ALL,
+            SRC_FILTER_ALL,
+            TYPE_FILTER_ALL,
+            NOT_TRIM_USER
+        );
     }
 
     private Activity activity;
@@ -185,4 +217,37 @@ public abstract class SimpleWeibo {
 
         return ai.metaData.getString(key);
     }
+
+    /** TODO enum */
+
+    public static final int FEATURE_ALL      = 0;
+    public static final int FEATURE_ORIGINAL = 1;
+    public static final int FEATURE_PICTURE  = 2;
+    public static final int FEATURE_VIDEO    = 3;
+    public static final int FEATURE_MUSICE   = 4;
+
+    public static final int AUTHOR_FILTER_ALL        = 0;
+    public static final int AUTHOR_FILTER_ATTENTIONS = 1;
+    public static final int AUTHOR_FILTER_STRANGER   = 2;
+
+    public static final int SRC_FILTER_ALL      = 0;
+    public static final int SRC_FILTER_WEIBO    = 1;
+    public static final int SRC_FILTER_WEIQUN   = 2;
+
+    public static final int TYPE_FILTER_ALL     = 0;
+    public static final int TYPE_FILTER_ORIGAL  = 1;
+
+    public static final boolean APP_ONLY = true;
+    public static final boolean NOT_APP_ONLY = !APP_ONLY;
+
+    public static final boolean TRIM_USER = true;
+    public static final boolean NOT_TRIM_USER = !TRIM_USER;
+
+    public static final int FRONT_PAGE = 1;
+
+    public static final int DEFAULT_LIMIT = 32;
+
+    public static final long UNKNOWN_MAX_ID = 0L;
+    public static final long UNKNOWN_SINCE_ID = 0L;
+
 }
