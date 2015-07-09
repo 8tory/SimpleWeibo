@@ -289,22 +289,22 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         }
     }
 
-    public static void _put(WeiboParameters params, String key, String value) {
+    private static void _put(WeiboParameters params, String key, String value) {
         params.put(key, value);
     }
-    public static void _put(WeiboParameters params, String key, int value) {
+    private static void _put(WeiboParameters params, String key, int value) {
         params.put(key, value);
     }
-    public static void _put(WeiboParameters params, String key, long value) {
+    private static void _put(WeiboParameters params, String key, long value) {
         params.put(key, value);
     }
-    public static void _put(WeiboParameters params, String key, boolean value) {
+    private static void _put(WeiboParameters params, String key, boolean value) {
         _put(params, key, value ? 1 : 0);
     }
-    public static void _put(WeiboParameters params, String key, android.graphics.Bitmap value) {
+    private static void _put(WeiboParameters params, String key, android.graphics.Bitmap value) {
         params.put(key, value);
     }
-    public static void _put(WeiboParameters params, String key, Object value) {
+    private static void _put(WeiboParameters params, String key, Object value) {
         params.put(key, value);
     }
 

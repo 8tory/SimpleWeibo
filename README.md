@@ -72,17 +72,17 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ```java
     @GET("/statuses/friends_timeline.json")
     public abstract Observable<Status> getStatuses(
-        @Query("since_id") String sinceId,
-        @Query("max_id") String maxId,
-        @Query("count") String count,
-        @Query("page") String page,
-        @Query("base_app") String baseApp,
-        @Query("trim_user") String trimUser,
-        @Query("feature") String featureType
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("base_app") boolean baseApp,
+        @Query("trim_user") boolean trimUser,
+        @Query("feature") int featureType
     );
 
     public Observable<Status> getStatuses() {
-        return getStatuses("0", "0", "24", "1", "0", "0", "0");
+        return getStatuses(0L, 0L, 24, 1, false, false, 0);
     }
 ```
 
