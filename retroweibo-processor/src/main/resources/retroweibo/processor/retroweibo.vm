@@ -307,6 +307,9 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     private static void _put(WeiboParameters params, String key, Object value) {
         params.put(key, value);
     }
+    private static void _put(WeiboParameters params, String key, Object[] values) {
+        _put(params, key, TextUtils.join(",", values));
+    }
 
     private Observable<AccessToken> _logIn() {
         return logInWithPermissions(Arrays.asList(

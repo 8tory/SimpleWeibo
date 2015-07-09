@@ -88,6 +88,18 @@ public abstract class SimpleWeibo {
         );
     }
 
+    @RetroWeibo.GET("/users/show.json")
+    public abstract Observable<User> getUser(@RetroWeibo.Query("uid") long uid);
+
+    @RetroWeibo.GET("/users/show.json")
+    public abstract Observable<User> getUser(@RetroWeibo.Query("screen_name") String screenName);
+
+    @RetroWeibo.GET("/users/domain_show.json")
+    public abstract Observable<User> getDomain(@RetroWeibo.Query("domain") String domain);
+
+    @RetroWeibo.GET("/users/counts.json")
+    public abstract Observable<User> getUserCount(@RetroWeibo.Query("uids") long[] uids);
+
     private Activity activity;
     private Context context;
     private String appId;
