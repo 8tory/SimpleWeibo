@@ -45,8 +45,6 @@ public abstract class SimpleWeibo {
     public abstract Observable<Status> getStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
         @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
         @RetroWeibo.Query("base_app") boolean baseApp,
         @RetroWeibo.Query("trim_user") boolean trimUser,
         @RetroWeibo.Query("feature") int featureType
@@ -56,8 +54,6 @@ public abstract class SimpleWeibo {
         return getStatuses(
             UNKNOWN_SINCE_ID,
             UNKNOWN_MAX_ID,
-            DEFAULT_LIMIT,
-            FRONT_PAGE,
             NOT_APP_ONLY,
             NOT_TRIM_USER,
             FEATURE_ALL
@@ -68,8 +64,6 @@ public abstract class SimpleWeibo {
     public abstract Observable<Status> getMentionedStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
         @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
         @RetroWeibo.Query("filter_by_author") int filterByAuthor,
         @RetroWeibo.Query("filter_by_source") int filterBySource,
         @RetroWeibo.Query("filter_by_type") int filterByType,
@@ -79,8 +73,6 @@ public abstract class SimpleWeibo {
     public Observable<Status> getMentionedStatuses() {
         return getMentionedStatuses(UNKNOWN_SINCE_ID,
             UNKNOWN_MAX_ID,
-            DEFAULT_LIMIT,
-            FRONT_PAGE,
             AUTHOR_FILTER_ALL,
             SRC_FILTER_ALL,
             TYPE_FILTER_ALL,

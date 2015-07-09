@@ -167,22 +167,39 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 #if ($p.get)
 
                 return Observable.create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(final Subscriber<? super String> sub) {
+                    private int page = 1;
+                    private String cursor = "0";
+
+                    private void request(int page, String cursor, RequestListener listener) {
+                        params.put("count", 30);
+                        params.put("page", page);
+                        params.put("cursor", cursor);
                         new AsyncWeiboRunner(context).requestAsync(
                             HTTPS_WEIBO_API_2 + ${p.path}, // AbsOpenAPI.API_SERVER
                             params,
                             GET,
-                            new RequestListener() {
-                                @Override public void onComplete(String json) {
-                                    sub.onNext(json);
+                            listener
+                        );
+                    }
+
+                    @Override
+                    public void call(final Subscriber<? super String> sub) {
+                        RequestListener listener = new RequestListener() {
+                            @Override public void onComplete(String json) {
+                                sub.onNext(json);
+
+                                cursor = getNextCursor(json);
+                                if (cursor.equals("0")) {
                                     sub.onCompleted();
-                                }
-                                @Override public void onWeiboException(WeiboException e) {
-                                    sub.onError(e);
+                                } else {
+                                    request(page++, cursor, this);
                                 }
                             }
-                        );
+                            @Override public void onWeiboException(WeiboException e) {
+                                sub.onError(e);
+                            }
+                        };
+                        request(page++, cursor, listener);
                     }
                 });
 
@@ -406,5 +423,16 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         }
 
         return ai.metaData.getString(key);
+    }
+
+    private static String getNextCursor(String json) {
+        String nextCursor = "0";
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            nextCursor = jsonObject.optString("next_cursor", "0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return nextCursor;
     }
 }
