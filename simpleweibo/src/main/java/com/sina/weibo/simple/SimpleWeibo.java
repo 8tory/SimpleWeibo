@@ -65,7 +65,7 @@ public abstract class SimpleWeibo {
     }
 
     @RetroWeibo.GET("/mentions.json")
-    public abstract Observable<Status> getMentions(
+    public abstract Observable<Status> getMentionedStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
         @RetroWeibo.Query("max_id") long maxId,
         @RetroWeibo.Query("count") int count,
@@ -76,8 +76,8 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("trim_user") boolean trimUser
     );
 
-    public Observable<Status> getMentions() {
-        return getMentions(UNKNOWN_SINCE_ID,
+    public Observable<Status> getMentionedStatuses() {
+        return getMentionedStatuses(UNKNOWN_SINCE_ID,
             UNKNOWN_MAX_ID,
             DEFAULT_LIMIT,
             FRONT_PAGE,
@@ -89,16 +89,136 @@ public abstract class SimpleWeibo {
     }
 
     @RetroWeibo.GET("/users/show.json")
-    public abstract Observable<User> getUser(@RetroWeibo.Query("uid") long uid);
+    public abstract Observable<User> getUsersById(@RetroWeibo.Query("uid") long uid);
 
     @RetroWeibo.GET("/users/show.json")
-    public abstract Observable<User> getUsers(@RetroWeibo.Query("screen_name") String screenName);
+    public abstract Observable<User> getUsersByName(@RetroWeibo.Query("screen_name") String screenName);
 
     @RetroWeibo.GET("/users/domain_show.json")
-    public abstract Observable<User> getDomain(@RetroWeibo.Query("domain") String domain);
+    public abstract Observable<User> getUsersByDomain(@RetroWeibo.Query("domain") String domain);
 
     @RetroWeibo.GET("/users/counts.json")
-    public abstract Observable<User> getUserCount(@RetroWeibo.Query("uids") long[] uids);
+    public abstract Observable<User> getUsersCount(@RetroWeibo.Query("uids") long[] uids);
+
+    @RetroWeibo.GET("/comments/show.json")
+    public abstract Observable<Comment> getCommentsById(
+        @RetroWeibo.Query("id") int id,
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("filter_by_author") int filterByAuthor
+    );
+
+    public Observable<Comment> getCommentsById(int id) {
+        return getCommentsById(
+            id,
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            AUTHOR_FILTER_ALL
+        );
+    }
+
+    @RetroWeibo.GET("/comments/by_me.json")
+    public abstract Observable<Comment> getCommentsByMe(
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("filter_by_source") int filterBySource
+    );
+
+    public Observable<Comment> getCommentsByMe() {
+        return getCommentsByMe(SRC_FILTER_ALL);
+    }
+
+    public Observable<Comment> getCommentsByMe(int filterBySource) {
+        return getCommentsByMe(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            filterBySource
+        );
+    }
+
+    @RetroWeibo.GET("/comments/to_me.json")
+    public abstract Observable<Comment> getCommentsToMe(
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
+        @RetroWeibo.Query("filter_by_source") int filterBySource
+    );
+
+    public Observable<Comment> getCommentsToMe() {
+        return getCommentsToMe(AUTHOR_FILTER_ALL, SRC_FILTER_ALL);
+    }
+
+    public Observable<Comment> getCommentsToMe(int filterByAuthor, int filterBySource) {
+        return getCommentsToMe(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            filterByAuthor,
+            filterBySource
+        );
+    }
+
+    @RetroWeibo.GET("/comments/timeline.json")
+    public abstract Observable<Comment> getComments(
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("trim_user") boolean trimUser
+    );
+
+    public Observable<Comment> getComments() {
+        return getComments(NOT_TRIM_USER);
+    }
+
+    public Observable<Comment> getComments(boolean trimUser) {
+        return getComments(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            trimUser
+        );
+    }
+
+    @RetroWeibo.GET("/comments/mentions.json")
+    public abstract Observable<Comment> getMentionedComments(
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
+        @RetroWeibo.Query("filter_by_source") int filterBySource
+    );
+
+    public Observable<Comment> getMentionedComments() {
+        return getMentionedComments(AUTHOR_FILTER_ALL, SRC_FILTER_ALL);
+    }
+
+    public Observable<Comment> getMentionedComments(int filterByAuthor, int filterBySource) {
+        return getMentionedComments(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            DEFAULT_LIMIT,
+            FRONT_PAGE,
+            filterByAuthor,
+            filterBySource
+        );
+    }
+
+    @RetroWeibo.GET("comments/show_batch.json")
+    public abstract Observable<Comment> getBatchComments(@RetroWeibo.Query("cids") long[] cids);
 
     private Activity activity;
     private Context context;

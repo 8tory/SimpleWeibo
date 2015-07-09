@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Me").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getMentions().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Users").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUsers("yongjhih").map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersByName("yongjhih").map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("User").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUser(5647447265L).map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersById(5647447265L).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Domain").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getDomain("yongjhih").map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersByDomain("yongjhih").map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -201,12 +201,56 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("UserCount").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUserCount(new long[]{5647447265L, 5644315971L}).map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersCount(new long[]{5647447265L, 5644315971L}).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
                     card.message = Observable.just(user.description());
                     card.image = Observable.just(user.profileImageUrl());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("getComments").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getComments().map(comment -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(comment.user().avatarLarge());
+                    card.text1 = Observable.just(comment.user().screenName());
+                    card.message = Observable.just(comment.text());
+                    card.image = Observable.just(comment.originalPic());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("getCommentsByMe").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getCommentsByMe().map(comment -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(comment.user().avatarLarge());
+                    card.text1 = Observable.just(comment.user().screenName());
+                    card.message = Observable.just(comment.text());
+                    card.image = Observable.just(comment.originalPic());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("getCommentsToMe").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getCommentsToMe().map(comment -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(comment.user().avatarLarge());
+                    card.text1 = Observable.just(comment.user().screenName());
+                    card.message = Observable.just(comment.text());
+                    card.image = Observable.just(comment.originalPic());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("getMentionedComments").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getMentionedComments().map(comment -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(comment.user().avatarLarge());
+                    card.text1 = Observable.just(comment.user().screenName());
+                    card.message = Observable.just(comment.text());
+                    card.image = Observable.just(comment.originalPic());
                     return card;
                 })).doOnError(e -> e.printStackTrace()));
         }));
