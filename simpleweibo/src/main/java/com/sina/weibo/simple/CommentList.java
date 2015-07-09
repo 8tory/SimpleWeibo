@@ -21,11 +21,8 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
-/**
- * @see http://t.cn/zjM1a2W
- */
 @AutoJson
-public abstract class Comments implements android.os.Parcelable {
+public abstract class CommentList implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field(name = "comments")
     public abstract List<Comment> data();
