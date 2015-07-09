@@ -166,6 +166,50 @@ public class MainActivity extends AppCompatActivity {
                     return card;
                 })).doOnError(e -> e.printStackTrace()));
         }));
+        adapter.fragments.add(FragmentPage.create().title("Users").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getUsers("yongjhih").map(user -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(user.avatarLarge());
+                    card.text1 = Observable.just(user.screenName());
+                    card.message = Observable.just(user.description());
+                    card.image = Observable.just(user.profileImageUrl());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("User").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getUser(5647447265L).map(user -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(user.avatarLarge());
+                    card.text1 = Observable.just(user.screenName());
+                    card.message = Observable.just(user.description());
+                    card.image = Observable.just(user.profileImageUrl());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("Domain").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getDomain("yongjhih").map(user -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(user.avatarLarge());
+                    card.text1 = Observable.just(user.screenName());
+                    card.message = Observable.just(user.description());
+                    card.image = Observable.just(user.profileImageUrl());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
+        adapter.fragments.add(FragmentPage.create().title("UserCount").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getUserCount(new long[]{5647447265L, 5644315971L}).map(user -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(user.avatarLarge());
+                    card.text1 = Observable.just(user.screenName());
+                    card.message = Observable.just(user.description());
+                    card.image = Observable.just(user.profileImageUrl());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

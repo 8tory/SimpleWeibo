@@ -92,7 +92,7 @@ public abstract class SimpleWeibo {
     public abstract Observable<User> getUser(@RetroWeibo.Query("uid") long uid);
 
     @RetroWeibo.GET("/users/show.json")
-    public abstract Observable<User> getUser(@RetroWeibo.Query("screen_name") String screenName);
+    public abstract Observable<User> getUsers(@RetroWeibo.Query("screen_name") String screenName);
 
     @RetroWeibo.GET("/users/domain_show.json")
     public abstract Observable<User> getDomain(@RetroWeibo.Query("domain") String domain);
