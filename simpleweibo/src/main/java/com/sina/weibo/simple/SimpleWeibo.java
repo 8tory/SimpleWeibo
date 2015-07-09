@@ -43,17 +43,17 @@ public abstract class SimpleWeibo {
 
     @RetroWeibo.GET("/statuses/friends_timeline.json")
     public abstract Observable<Status> getStatuses(
-        @RetroWeibo.Query("since_id") String sinceId,
-        @RetroWeibo.Query("max_id") String maxId,
-        @RetroWeibo.Query("count") String count,
-        @RetroWeibo.Query("page") String page,
-        @RetroWeibo.Query("base_app") String baseApp,
-        @RetroWeibo.Query("trim_user") String trimUser,
-        @RetroWeibo.Query("feature") String featureType
+        @RetroWeibo.Query("since_id") long sinceId,
+        @RetroWeibo.Query("max_id") long maxId,
+        @RetroWeibo.Query("count") int count,
+        @RetroWeibo.Query("page") int page,
+        @RetroWeibo.Query("base_app") boolean baseApp,
+        @RetroWeibo.Query("trim_user") boolean trimUser,
+        @RetroWeibo.Query("feature") int featureType
     );
 
     public Observable<Status> getStatuses() {
-        return getStatuses("0", "0", "24", "1", "0", "0", "0");
+        return getStatuses(0L, 0L, 24, 1, false, false, 0);
     }
 
     private Activity activity;

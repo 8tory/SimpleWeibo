@@ -125,12 +125,12 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 
   #foreach ($query in $map.entrySet())
 
-                params.put($query.key, $query.value);
+                _put(params, $query.key, $query.value);
 
   #end
   #foreach ($queryMap in $maps)
 
-                add(params, ${queryMap});
+                _put(params, ${queryMap});
 
   #end
   ##foreach ($queryBundle in $bundles)
@@ -283,10 +283,29 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         return (T) o;
     }
 
-    private static void _add(WeiboParameters params, Map<String, String> map) {
+    private static void _put(WeiboParameters params, Map<String, String> map) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             params.put(entry.getKey(), entry.getValue());
         }
+    }
+
+    public static void _put(WeiboParameters params, String key, String value) {
+        params.put(key, value);
+    }
+    public static void _put(WeiboParameters params, String key, int value) {
+        params.put(key, value);
+    }
+    public static void _put(WeiboParameters params, String key, long value) {
+        params.put(key, value);
+    }
+    public static void _put(WeiboParameters params, String key, boolean value) {
+        _put(params, key, value ? 1 : 0);
+    }
+    public static void _put(WeiboParameters params, String key, android.graphics.Bitmap value) {
+        params.put(key, value);
+    }
+    public static void _put(WeiboParameters params, String key, Object value) {
+        params.put(key, value);
     }
 
     private Observable<AccessToken> _logIn() {
