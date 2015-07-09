@@ -166,6 +166,17 @@ public class MainActivity extends AppCompatActivity {
                     return card;
                 })).doOnError(e -> e.printStackTrace()));
         }));
+        adapter.fragments.add(FragmentPage.create().title("getMentionedStatuses").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().map(status -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just(status.user().avatarLarge());
+                    card.text1 = Observable.just(status.user().screenName());
+                    card.message = Observable.just(status.text());
+                    card.image = Observable.just(status.originalPic());
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
         adapter.fragments.add(FragmentPage.create().title("Users").fragment(() -> {
             return RxCardsFragment.create()
                 .items(Observable.defer(() -> mWeibo.getUsersByName("yongjhih").map(user -> {
