@@ -22,7 +22,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 @AutoJson
-public abstract class Users implements android.os.Parcelable {
+public abstract class UserList implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field(name = "users")
     public abstract List<User> data();

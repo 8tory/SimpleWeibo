@@ -25,7 +25,7 @@ import java.util.List;
  * @see http://t.cn/zjM1a2W
  */
 @AutoJson
-public abstract class Statuss implements android.os.Parcelable {
+public abstract class StatusList implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field(name = "statuses")
     public abstract List<Status> data();

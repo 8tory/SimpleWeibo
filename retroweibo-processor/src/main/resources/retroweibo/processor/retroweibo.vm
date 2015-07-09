@@ -236,10 +236,10 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         }).flatMap(new Func1<String, Observable<$p.typeArgs>>() {
             @Override public Observable<${p.typeArgs}> call(String json) {
                 // TODO check "data" field to determine parse group or item.
-                ${p.typeArgs}s group = null;
+                ${p.typeArgs}List group = null;
                 try {
-                    Log.d("RetroWeibo", "${p.typeArgs}s: " + json);
-                    group = LoganSquare.parse(json, AutoJson_${p.typeArgs}s.class);
+                    Log.d("RetroWeibo", "${p.typeArgs}List: " + json);
+                    group = LoganSquare.parse(json, AutoJson_${p.typeArgs}List.class);
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                     return Observable.empty();
