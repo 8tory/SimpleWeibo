@@ -118,7 +118,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.8tory:simpleweibo:1.0.0'
+  compile 'com.github.8tory:simpleweibo:-SNAPSHOT'
 }
 ```
 
