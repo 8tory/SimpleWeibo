@@ -91,8 +91,7 @@ public abstract class SimpleWeibo {
     }
 
     public Observable<AccessToken> logIn() {
-        return logInWithPermissions(Arrays.asList(
-            "email",
+        return logInWithPermissions("email",
             "direct_messages_read",
             "direct_messages_write",
             "friendships_groups_read",
@@ -100,7 +99,11 @@ public abstract class SimpleWeibo {
             "statuses_to_me_read",
             "follow_app_official_microblog",
             "invitation_write"
-        ));
+        );
+    }
+
+    public Observable<AccessToken> logInWithPermissions(String... permissions) {
+        return logInWithPermissions(Arrays.asList(permissions));
     }
 
     public Observable<AccessToken> logInWithPermissions(Collection<String> permissions) {
