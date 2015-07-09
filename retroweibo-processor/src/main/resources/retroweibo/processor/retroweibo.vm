@@ -285,26 +285,32 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 
     private static void _put(WeiboParameters params, Map<String, String> map) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
+            android.util.Log.d("RetroWeibo", entry.getKey() + ":" + entry.getValue());
             params.put(entry.getKey(), entry.getValue());
         }
     }
 
     private static void _put(WeiboParameters params, String key, String value) {
+        android.util.Log.d("RetroWeibo", key + ":" + value);
         params.put(key, value);
     }
     private static void _put(WeiboParameters params, String key, int value) {
+        android.util.Log.d("RetroWeibo", key + ":" + value);
         params.put(key, value);
     }
     private static void _put(WeiboParameters params, String key, long value) {
+        android.util.Log.d("RetroWeibo", key + ":" + value);
         params.put(key, value);
     }
     private static void _put(WeiboParameters params, String key, boolean value) {
         _put(params, key, value ? 1 : 0);
     }
     private static void _put(WeiboParameters params, String key, android.graphics.Bitmap value) {
+        android.util.Log.d("RetroWeibo", key + ":" + value);
         params.put(key, value);
     }
     private static void _put(WeiboParameters params, String key, Object value) {
+        android.util.Log.d("RetroWeibo", key + ":" + value);
         params.put(key, value);
     }
     private static void _put(WeiboParameters params, String key, Object[] values) {
