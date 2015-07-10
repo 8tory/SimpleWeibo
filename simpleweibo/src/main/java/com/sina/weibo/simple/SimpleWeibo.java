@@ -211,7 +211,7 @@ public abstract class SimpleWeibo {
         );
     }
 
-    @RetroWeibo.GET("comments/show_batch.json")
+    @RetroWeibo.GET("/comments/show_batch.json")
     public abstract Observable<Comment> getBatchComments(@RetroWeibo.Query("cids") long[] cids);
 
     private Activity activity;
