@@ -1,3 +1,6 @@
+version rootProject.ext.VERSION_NAME
+group rootProject.ext.GROUP
+
 buildscript {
     repositories {
         jcenter()
@@ -75,6 +78,3 @@ dependencies {
     compile 'com.github.yongjhih.LoganSquare:logansquare:-SNAPSHOT'
     apt 'com.github.yongjhih.LoganSquare:logansquare-compiler:-SNAPSHOT'
 }
-
-//version rootProject.ext.VERSION_NAME
-//group rootProject.ext.GROUP

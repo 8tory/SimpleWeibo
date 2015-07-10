@@ -1,3 +1,6 @@
+version rootProject.ext.VERSION_NAME
+group rootProject.ext.GROUP
+
 apply plugin: 'java'
 //apply from: file('deploy.gradle')
 
@@ -33,6 +36,3 @@ tasks.withType(Test) {
     events "passed", "skipped", "failed"
   }
 }
-
-//version rootProject.ext.VERSION_NAME
-//group rootProject.ext.GROUP
