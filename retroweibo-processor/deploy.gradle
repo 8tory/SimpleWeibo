@@ -40,7 +40,7 @@ def getRepositoryPassword() {
 }
 
 afterEvaluate { project ->
-    uploadArchives {
+    install {
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
@@ -88,7 +88,7 @@ afterEvaluate { project ->
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        required { isReleaseBuild() && gradle.taskGraph.hasTask("install") }
         sign configurations.archives
     }
 
