@@ -35,6 +35,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 
 import rx.Observable;
+import rx.functions.*;
+import rx.Subscriber;
 
 import retroweibo.RetroWeibo;
 
@@ -262,7 +264,7 @@ public abstract class SimpleWeibo {
         return logInWithPermissions(Arrays.asList(permissions));
     }
 
-    public Observable<AccessToken> logInWithPermissions(Collection<String> permissions) {
+    public Observable<AccessToken> logInWithPermissions(final Collection<String> permissions) {
         if (accessToken == null) accessToken = AccessTokenPreferences.create(context);
 
         if (isValid(accessToken)) {
@@ -273,42 +275,50 @@ public abstract class SimpleWeibo {
 
         ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl,
                 TextUtils.join(",", permissions)));
-        return logInForOauth2AccessToken(permissions).map(oauth2 -> {
-            accessToken.uid(oauth2.getUid());
-            accessToken.token(oauth2.getToken());
-            accessToken.refreshToken(oauth2.getRefreshToken());
-            accessToken.expiresTime(oauth2.getExpiresTime());
-            accessToken.phoneNum(oauth2.getPhoneNum());
-            accessToken.permissions(new HashSet<>(permissions)); //accessToken.permissions(permissions.addAll(accessToken.permissions()));
-            return accessToken;
+        return logInForOauth2AccessToken(permissions).map(new Func1<Oauth2AccessToken, AccessToken>() {
+            @Override public AccessToken call(Oauth2AccessToken oauth2) {
+                accessToken.uid(oauth2.getUid());
+                accessToken.token(oauth2.getToken());
+                accessToken.refreshToken(oauth2.getRefreshToken());
+                accessToken.expiresTime(oauth2.getExpiresTime());
+                accessToken.phoneNum(oauth2.getPhoneNum());
+                accessToken.permissions(new HashSet<>(permissions)); //accessToken.permissions(permissions.addAll(accessToken.permissions()));
+                return accessToken;
+            }
         });
     }
 
     public Observable<Oauth2AccessToken> logInForOauth2AccessToken(Collection<String> permissions) {
-        return logInForBundle(permissions).map(bundle -> {
-            return Oauth2AccessToken.parseAccessToken(bundle);
-        }).flatMap(oauth2 -> {
-            if (!oauth2.isSessionValid()) {
-                return Observable.error(new WeiboException("AccessToken is invalid"));
+        return logInForBundle(permissions).map(new Func1<Bundle, Oauth2AccessToken>() {
+            @Override public Oauth2AccessToken call(Bundle bundle) {
+                return Oauth2AccessToken.parseAccessToken(bundle);
             }
-            return Observable.just(oauth2);
+        }).flatMap(new Func1<Oauth2AccessToken, Observable<Oauth2AccessToken>>() {
+            @Override public Observable<Oauth2AccessToken> call(Oauth2AccessToken oauth2) {
+                if (!oauth2.isSessionValid()) {
+                    return Observable.error(new WeiboException("AccessToken is invalid"));
+                }
+                return Observable.just(oauth2);
+            }
         });
     }
 
     public Observable<Bundle> logInForBundle(Collection<String> permissions) {
-        return Observable.create(sub -> {
-            ssoHandler.authorize(new WeiboAuthListener() {
-                @Override public void onComplete(Bundle values) {
-                    sub.onNext(values);
-                    sub.onCompleted();
-                }
-                @Override public void onCancel() {
-                    sub.onCompleted();
-                }
-                @Override public void onWeiboException(WeiboException e) {
-                    sub.onError(e);
-                }
-            });
+        return Observable.create(new Observable.OnSubscribe<Bundle>() {
+            @Override public void call(final Subscriber<? super Bundle> sub) {
+                ssoHandler.authorize(new WeiboAuthListener() {
+                    @Override public void onComplete(Bundle values) {
+                        sub.onNext(values);
+                        sub.onCompleted();
+                    }
+                    @Override public void onCancel() {
+                        sub.onCompleted();
+                    }
+                    @Override public void onWeiboException(WeiboException e) {
+                        sub.onError(e);
+                    }
+                });
+            }
         });
     }
 

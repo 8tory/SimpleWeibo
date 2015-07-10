@@ -315,7 +315,7 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     }
 
     private Observable<AccessToken> _logIn() {
-        return logInWithPermissions(Arrays.asList(
+        return logInWithPermissions(
             "email",
             "direct_messages_read",
             "direct_messages_write",
@@ -324,10 +324,14 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
             "statuses_to_me_read",
             "follow_app_official_microblog",
             "invitation_write"
-        ));
+        );
     }
 
-    private Observable<AccessToken> _logInWithPermissions(Collection<String> permissions) {
+    public Observable<AccessToken> _logInWithPermissions(String... permissions) {
+        return _logInWithPermissions(Arrays.asList(permissions));
+    }
+
+    private Observable<AccessToken> _logInWithPermissions(final Collection<String> permissions) {
         if (accessToken == null) accessToken = AccessTokenPreferences.create(context);
 
         if (true) return Observable.just(accessToken);
@@ -340,44 +344,53 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 
         ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl,
                 TextUtils.join(",", permissions)));
-        return _logInForOauth2AccessToken(permissions).map(oauth2 -> {
-            accessToken.uid(oauth2.getUid());
-            accessToken.token(oauth2.getToken());
-            accessToken.refreshToken(oauth2.getRefreshToken());
-            accessToken.expiresTime(oauth2.getExpiresTime());
-            accessToken.phoneNum(oauth2.getPhoneNum());
-            accessToken.permissions(new HashSet<>(permissions)); //accessToken.permissions(permissions.addAll(accessToken.permissions()));
-            return accessToken;
+        return _logInForOauth2AccessToken(permissions).map(new Func1<Oauth2AccessToken, AccessToken>() {
+            @Override public AccessToken call(Oauth2AccessToken oauth2) {
+                accessToken.uid(oauth2.getUid());
+                accessToken.token(oauth2.getToken());
+                accessToken.refreshToken(oauth2.getRefreshToken());
+                accessToken.expiresTime(oauth2.getExpiresTime());
+                accessToken.phoneNum(oauth2.getPhoneNum());
+                accessToken.permissions(new HashSet<>(permissions)); //accessToken.permissions(permissions.addAll(accessToken.permissions()));
+                return accessToken;
+            }
         });
     }
 
     private Observable<Oauth2AccessToken> _logInForOauth2AccessToken(Collection<String> permissions) {
-        return _logInForBundle(permissions).map(bundle -> {
-            return Oauth2AccessToken.parseAccessToken(bundle);
-        }).flatMap(oauth2 -> {
-            if (!oauth2.isSessionValid()) {
-                return Observable.error(new WeiboException("AccessToken is invalid"));
+        return _logInForBundle(permissions).map(new Func1<Bundle, Oauth2AccessToken>() {
+            @Override public Oauth2AccessToken call(Bundle bundle) {
+                return Oauth2AccessToken.parseAccessToken(bundle);
             }
-            return Observable.just(oauth2);
+        }).flatMap(new Func1<Oauth2AccessToken, Observable<Oauth2AccessToken>>() {
+            @Override public Observable<Oauth2AccessToken> call(Oauth2AccessToken oauth2) {
+                if (!oauth2.isSessionValid()) {
+                    return Observable.error(new WeiboException("AccessToken is invalid"));
+                }
+                return Observable.just(oauth2);
+            }
         });
     }
 
     private Observable<Bundle> _logInForBundle(Collection<String> permissions) {
-        return Observable.create(sub -> {
-            ssoHandler.authorize(new WeiboAuthListener() {
-                @Override public void onComplete(Bundle values) {
-                    sub.onNext(values);
-                    sub.onCompleted();
-                }
-                @Override public void onCancel() {
-                    sub.onCompleted();
-                }
-                @Override public void onWeiboException(WeiboException e) {
-                    sub.onError(e);
-                }
-            });
+        return Observable.create(new Observable.OnSubscribe<Bundle>() {
+            @Override public void call(final Subscriber<? super Bundle> sub) {
+                ssoHandler.authorize(new WeiboAuthListener() {
+                    @Override public void onComplete(Bundle values) {
+                        sub.onNext(values);
+                        sub.onCompleted();
+                    }
+                    @Override public void onCancel() {
+                        sub.onCompleted();
+                    }
+                    @Override public void onWeiboException(WeiboException e) {
+                        sub.onError(e);
+                    }
+                });
+            }
         });
     }
+
 
     private static boolean _isValid(AccessToken accessToken) {
         return !TextUtils.isEmpty(accessToken.token()); // TODO && isExpired(accessToken)
