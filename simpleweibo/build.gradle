@@ -9,14 +9,11 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-        classpath 'com.github.dcendents:android-maven-plugin:1.2'
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
-//apply from: file('deploy.gradle')
-apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 22
@@ -75,6 +72,6 @@ dependencies {
     compile project(':retroweibo')
     apt project(':retroweibo-processor')
 
-    compile 'com.github.yongjhih.LoganSquare:logansquare:-SNAPSHOT'
-    apt 'com.github.yongjhih.LoganSquare:logansquare-compiler:-SNAPSHOT'
+    compile 'com.infstory:logansquare:1.1.1'
+    apt 'com.infstory:logansquare-compiler:1.1.1'
 }
