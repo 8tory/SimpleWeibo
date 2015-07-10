@@ -92,6 +92,8 @@ afterEvaluate { project ->
         sign configurations.archives
     }
 
+    task uploadArchives(dependsOn: install)
+
     task androidJavadocs(type: Javadoc) {
         failOnError false
         source = android.sourceSets.main.java.srcDirs
