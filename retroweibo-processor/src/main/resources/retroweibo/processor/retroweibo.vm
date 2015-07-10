@@ -166,87 +166,15 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 
 #if ($p.get)
 
-                return Observable.create(new Observable.OnSubscribe<String>() {
-                    private int page = 1;
-                    private String cursor = "0";
-
-                    private void request(int page, String cursor, RequestListener listener) {
-                        params.put("count", 30);
-                        params.put("page", page);
-                        params.put("cursor", cursor);
-                        new AsyncWeiboRunner(context).requestAsync(
-                            HTTPS_WEIBO_API_2 + ${p.path}, // AbsOpenAPI.API_SERVER
-                            params,
-                            GET,
-                            listener
-                        );
-                    }
-
-                    @Override
-                    public void call(final Subscriber<? super String> sub) {
-                        RequestListener listener = new RequestListener() {
-                            @Override public void onComplete(String json) {
-                                sub.onNext(json);
-
-                                cursor = getNextCursor(json);
-                                if (cursor.equals("0")) {
-                                    sub.onCompleted();
-                                } else {
-                                    request(page++, cursor, this);
-                                }
-                            }
-                            @Override public void onWeiboException(WeiboException e) {
-                                sub.onError(e);
-                            }
-                        };
-                        request(page++, cursor, listener);
-                    }
-                });
+                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, GET));
 
 #elseif ($p.post)
 
-                return Observable.create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(final Subscriber<? super String> sub) {
-                        new AsyncWeiboRunner(context).requestAsync(
-                            HTTPS_WEIBO_API_2 + ${p.path}, // AbsOpenAPI.API_SERVER
-                            params,
-                            POST,
-                            new RequestListener() {
-                                @Override public void onComplete(String json) {
-                                    sub.onNext(json);
-                                    sub.onCompleted();
-                                }
-                                @Override public void onWeiboException(WeiboException e) {
-                                    sub.onError(e);
-                                }
-                            }
-                        );
-                    }
-                });
+                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, POST));
 
 #elseif ($p.delete)
 
-                return Observable.create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(final Subscriber<? super String> sub) {
-                        new AsyncWeiboRunner(context).requestAsync(
-                            HTTPS_WEIBO_API_2 + ${p.path}, // AbsOpenAPI.API_SERVER
-                            params,
-                            DELETE,
-                            new RequestListener() {
-                                @Override public void onComplete(String json) {
-                                    sub.onNext(json);
-                                    sub.onCompleted();
-                                }
-                                @Override public void onWeiboException(WeiboException e) {
-                                    sub.onError(e);
-                                }
-                            }
-                        );
-                    }
-                });
-
+                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, DELETE));
 #end
 
             }
@@ -295,6 +223,58 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     }
 
 #end
+
+    private static class OnSubscribeWeibo implements Observable.OnSubscribe<String> {
+        private static final int DEFAULT_LIMIT = 30;
+        private static final String COUNT = "count";
+        private static final String PAGE = "page";
+        private static final String CURSOR = "cursor";
+        private int page = 1;
+        private String cursor = "0";
+        private Context context;
+        private String url;
+        private WeiboParameters params;
+        private String method;
+
+        public OnSubscribeWeibo(Context context, String url, WeiboParameters params, String method) {
+            this.context = context;
+            this.params = params;
+            this.method = method;
+            this.url = url;
+        }
+
+        private void request(int page, String cursor, RequestListener listener) {
+            params.put(COUNT, DEFAULT_LIMIT);
+            params.put(PAGE, page);
+            params.put(CURSOR, cursor);
+            new AsyncWeiboRunner(context).requestAsync(
+                url,
+                params,
+                GET,
+                listener
+            );
+        }
+
+        @Override
+        public void call(final Subscriber<? super String> sub) {
+            RequestListener listener = new RequestListener() {
+                @Override public void onComplete(String json) {
+                    sub.onNext(json);
+
+                    cursor = getNextCursor(json);
+                    if ("0".equals(cursor)) {
+                        sub.onCompleted();
+                    } else {
+                        request(page++, cursor, this);
+                    }
+                }
+                @Override public void onWeiboException(WeiboException e) {
+                    sub.onError(e);
+                }
+            };
+            request(page++, cursor, listener);
+        }
+    }
 
     private static <T> T _cast(Object o) {
         return (T) o;
