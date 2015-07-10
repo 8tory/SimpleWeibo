@@ -75,70 +75,70 @@ Ready API:
 [SimpleWeibo.java](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java):
 
 ```java
-    @RetroWeibo.GET("/statuses/friends_timeline.json")
+    @GET("/statuses/friends_timeline.json")
     public abstract Observable<Status> getStatuses(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("base_app") boolean baseApp,
-        @RetroWeibo.Query("trim_user") boolean trimUser,
-        @RetroWeibo.Query("feature") int featureType
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("base_app") boolean baseApp,
+        @Query("trim_user") boolean trimUser,
+        @Query("feature") int featureType
     );
 
     public Observable<Status> getStatuses() {
         // ...
     }
 
-    @RetroWeibo.GET("/mentions.json")
+    @GET("/mentions.json")
     public abstract Observable<Status> getMentionedStatuses(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
-        @RetroWeibo.Query("filter_by_source") int filterBySource,
-        @RetroWeibo.Query("filter_by_type") int filterByType,
-        @RetroWeibo.Query("trim_user") boolean trimUser
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("filter_by_author") int filterByAuthor,
+        @Query("filter_by_source") int filterBySource,
+        @Query("filter_by_type") int filterByType,
+        @Query("trim_user") boolean trimUser
     );
 
     public Observable<Status> getMentionedStatuses() {
         // ...
     }
 
-    @RetroWeibo.GET("/users/show.json")
-    public abstract Observable<User> getUsersById(@RetroWeibo.Query("uid") long uid);
+    @GET("/users/show.json")
+    public abstract Observable<User> getUsersById(@Query("uid") long uid);
 
-    @RetroWeibo.GET("/users/show.json")
-    public abstract Observable<User> getUsersByName(@RetroWeibo.Query("screen_name") String screenName);
+    @GET("/users/show.json")
+    public abstract Observable<User> getUsersByName(@Query("screen_name") String screenName);
 
-    @RetroWeibo.GET("/users/domain_show.json")
-    public abstract Observable<User> getUsersByDomain(@RetroWeibo.Query("domain") String domain);
+    @GET("/users/domain_show.json")
+    public abstract Observable<User> getUsersByDomain(@Query("domain") String domain);
 
-    @RetroWeibo.GET("/users/counts.json")
-    public abstract Observable<User> getUsersCount(@RetroWeibo.Query("uids") long[] uids);
+    @GET("/users/counts.json")
+    public abstract Observable<User> getUsersCount(@Query("uids") long[] uids);
 
-    @RetroWeibo.GET("/comments/show.json")
+    @GET("/comments/show.json")
     public abstract Observable<Comment> getCommentsById(
-        @RetroWeibo.Query("id") int id,
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("filter_by_author") int filterByAuthor
+        @Query("id") int id,
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("filter_by_author") int filterByAuthor
     );
 
     public Observable<Comment> getCommentsById(int id) {
         // ...
     }
 
-    @RetroWeibo.GET("/comments/by_me.json")
+    @GET("/comments/by_me.json")
     public abstract Observable<Comment> getCommentsByMe(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("filter_by_source") int filterBySource
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("filter_by_source") int filterBySource
     );
 
     public Observable<Comment> getCommentsByMe() {
@@ -149,14 +149,14 @@ Ready API:
         // ...
     }
 
-    @RetroWeibo.GET("/comments/to_me.json")
+    @GET("/comments/to_me.json")
     public abstract Observable<Comment> getCommentsToMe(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
-        @RetroWeibo.Query("filter_by_source") int filterBySource
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("filter_by_author") int filterByAuthor,
+        @Query("filter_by_source") int filterBySource
     );
 
     public Observable<Comment> getCommentsToMe() {
@@ -167,13 +167,13 @@ Ready API:
         // ...
     }
 
-    @RetroWeibo.GET("/comments/timeline.json")
+    @GET("/comments/timeline.json")
     public abstract Observable<Comment> getComments(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("trim_user") boolean trimUser
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("trim_user") boolean trimUser
     );
 
     public Observable<Comment> getComments() {
@@ -184,14 +184,14 @@ Ready API:
         // ...
     }
 
-    @RetroWeibo.GET("/comments/mentions.json")
+    @GET("/comments/mentions.json")
     public abstract Observable<Comment> getMentionedComments(
-        @RetroWeibo.Query("since_id") long sinceId,
-        @RetroWeibo.Query("max_id") long maxId,
-        @RetroWeibo.Query("count") int count,
-        @RetroWeibo.Query("page") int page,
-        @RetroWeibo.Query("filter_by_author") int filterByAuthor,
-        @RetroWeibo.Query("filter_by_source") int filterBySource
+        @Query("since_id") long sinceId,
+        @Query("max_id") long maxId,
+        @Query("count") int count,
+        @Query("page") int page,
+        @Query("filter_by_author") int filterByAuthor,
+        @Query("filter_by_source") int filterBySource
     );
 
     public Observable<Comment> getMentionedComments() {
@@ -202,8 +202,8 @@ Ready API:
         // ...
     }
 
-    @RetroWeibo.GET("comments/show_batch.json")
-    public abstract Observable<Comment> getBatchComments(@RetroWeibo.Query("cids") long[] cids);
+    @GET("/comments/show_batch.json")
+    public abstract Observable<Comment> getBatchComments(@Query("cids") long[] cids);
 ```
 
 Add Model: [Status.java](simpleweibo/src/main/java/com/sina/weibo/simple/Status.java):
