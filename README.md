@@ -1,5 +1,7 @@
 # SimpleWeibo
 
+[![Join the chat at https://gitter.im/8tory/SimpleWeibo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/8tory/SimpleWeibo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/8tory/SimpleWeibo.svg)](https://travis-ci.org/8tory/SimpleWeibo)
 
 [![](https://avatars0.githubusercontent.com/u/5761889?v=3&s=48)](https://github.com/Wendly)
