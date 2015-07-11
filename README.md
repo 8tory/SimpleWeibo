@@ -238,7 +238,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.8tory.SimpleWeibo:simpleweibo:-SNAPSHOT'
+    compile 'com.github.8tory.SimpleWeibo:simpleweibo:-SNAPSHOT'
 }
 ```
 
@@ -250,7 +250,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.infstory:simpleweibo:1.0.0'
+    compile 'com.infstory:simpleweibo:1.0.0'
 }
 ```
 
