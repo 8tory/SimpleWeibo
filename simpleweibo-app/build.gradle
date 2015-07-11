@@ -104,4 +104,5 @@ dependencies {
     compile 'com.infstory:proguard-snippets:1.0.0'
 
     compile project(':simpleweibo')
+    //compile 'com.github.8tory.SimpleWeibo:simpleweibo:-SNAPSHOT'
 }
