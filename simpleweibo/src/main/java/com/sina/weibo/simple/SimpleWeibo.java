@@ -304,6 +304,7 @@ public abstract class SimpleWeibo {
 
     public static final String APPLICATION_ID_PROPERTY = "com.sina.weibo.sdk.ApplicationId";
     public static final String REDIRECT_URL_PROPERTY = "com.sina.weibo.sdk.RedirectUrl";
+    private static final String DEFAULT_REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
 
     public static SimpleWeibo get() {
         return self;
@@ -318,8 +319,10 @@ public abstract class SimpleWeibo {
         this.activity = activity;
         this.context = activity;
         this.appId = getMetaData(activity, APPLICATION_ID_PROPERTY);
-        this.redirectUrl = getMetaData(activity, REDIRECT_URL_PROPERTY);
         // null ? throw new IllegalArgumentException()
+        this.redirectUrl = getMetaData(activity, REDIRECT_URL_PROPERTY);
+        if (this.redirectUrl == null || "".equals(this.redirectUrl)) this.redirectUrl = DEFAULT_REDIRECT_URL;
+
         ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl, TextUtils.join(",", Arrays.asList("email"))));
         return this;
     }

@@ -73,9 +73,9 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     public $subclass(Activity activity) {
         this.activity = activity;
         this.context = activity;
-        this.appId = getMetaData(activity, APPLICATION_ID_PROPERTY);
+        this.appId = _getMetaData(activity, APPLICATION_ID_PROPERTY);
         // null ? throw new IllegalArgumentException()
-        this.redirectUrl = getMetaData(activity, REDIRECT_URL_PROPERTY);
+        this.redirectUrl = _getMetaData(activity, REDIRECT_URL_PROPERTY);
         if (this.redirectUrl == null || "".equals(this.redirectUrl)) this.redirectUrl = DEFAULT_REDIRECT_URL;
     }
 
