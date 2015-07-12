@@ -20,6 +20,7 @@ import auto.json.AutoJson;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import rx.Observable;
 
 /**
  * @see http://t.cn/zjM1a2W
@@ -131,5 +132,9 @@ public abstract class Status implements android.os.Parcelable {
 
     public static Builder builder() {
         return new AutoJson_Status.Builder();
+    }
+
+    public Observable<Response> comment(String comment) {
+        return SimpleWeibo.get().publishComment(comment, this);
     }
 }

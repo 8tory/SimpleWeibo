@@ -268,6 +268,18 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("comment_ori") boolean pingback
     );
 
+    public Observable<Response> publishComment(String comment, long id) {
+        return publishComment(comment, id, true);
+    }
+
+    public Observable<Response> publishComment(String comment, Status status) {
+        return publishComment(comment, status.id());
+    }
+
+    public Observable<Response> publishComment(String comment, String id) {
+        return publishComment(comment, Long.valueOf(id));
+    }
+
     @RetroWeibo.POST("/comments/destroy.json")
     public abstract Observable<Response> deleteComment(
         @RetroWeibo.Query("cid") long commentId
@@ -286,6 +298,52 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("without_mention") boolean withoutMention,
         @RetroWeibo.Query("comment_ori") boolean pingback
     );
+
+    public Observable<Response> replyComment(
+        String comment,
+        String cid,
+        String id,
+        boolean withoutMention,
+        boolean pingback
+    ) {
+        return replyComment(
+            comment,
+            Long.valueOf(cid),
+            Long.valueOf(id),
+            withoutMention,
+            pingback
+        );
+    }
+
+    public Observable<Response> replyComment(
+        String comment,
+        String cid,
+        String id
+    ) {
+        return replyComment(
+            comment,
+            Long.valueOf(cid),
+            Long.valueOf(id)
+        );
+    }
+
+    public Observable<Response> replyComment(
+        String comment,
+        long cid,
+        long id
+    ) {
+        return replyComment(
+            comment,
+            cid,
+            id,
+            false,
+            true
+        );
+    }
+
+    public Observable<Response> replyComment(String comment, Comment parentComment) {
+        return replyComment(comment, parentComment.id(), parentComment.status().id());
+    }
 
     @RetroWeibo.POST("/oauth2/revokeoauth2")
     public abstract Observable<Response> revoke();

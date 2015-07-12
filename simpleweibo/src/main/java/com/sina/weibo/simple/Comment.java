@@ -20,6 +20,7 @@ import auto.json.AutoJson;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import rx.Observable;
 
 @AutoJson
 public abstract class Comment implements android.os.Parcelable {
@@ -94,6 +95,12 @@ public abstract class Comment implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field(name = "pic_urls")
     public abstract List<String> picUrls();
+    @Nullable
+    @AutoJson.Field
+    public abstract Status status();
+    @Nullable
+    @AutoJson.Field(name = "reply_comment")
+    public abstract Comment replyComment();
 
     @AutoJson.Builder
     public abstract static class Builder {
@@ -122,11 +129,17 @@ public abstract class Comment implements android.os.Parcelable {
         //public abstract Builder visible(Visible x);
         public abstract Builder visible(boolean x); // TODO
         public abstract Builder picUrls(List<String> x);
+        public abstract Builder status(Status x);
+        public abstract Builder replyComment(Comment x);
 
         public abstract Comment build();
     }
 
     public static Builder builder() {
         return new AutoJson_Comment.Builder();
+    }
+
+    public Observable<Response> comment(String comment) {
+        return SimpleWeibo.get().replyComment(comment, this);
     }
 }
