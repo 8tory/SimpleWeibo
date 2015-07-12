@@ -50,6 +50,7 @@ import com.sina.weibo.simple.*;
 
 import butterknife.InjectView;
 import butterknife.ButterKnife;
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -267,13 +268,20 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Invite").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.invite(5644315971L, Invitation.builder().text("Andrew Chen: Yo SimpleWeibo!").url("https://github.com/8tory/SimpleWeibo").logo("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png").build()).map(resp -> {
-                    RxCard card = new RxCard();
-                    card.icon = Observable.just("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png");
-                    card.text1 = Observable.just(resp.errorCode() + ":" + resp.error() + ":" + "Andrew Chen: Yo SimpleWeibo!");
-                    card.message = Observable.just("https://github.com/8tory/SimpleWeibo");
-                    return card;
-                })).doOnError(e -> e.printStackTrace()));
+                .items(Observable.defer(() -> {
+                    //try {
+                        //return mWeibo.invite(5644315971L, Invitation.builder().text(URLEncoder.encode("Andrew Chen: Yo SimpleWeibo!", "UTF-8")).url(URLEncoder.encode("https://github.com/8tory/SimpleWeibo", "UTF-8")).logo(URLEncoder.encode("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png", "UTF-8")).build()).map(resp -> {
+                    //} catch (java.io.UnsupportedEncodingException e) {
+                        //return Observable.empty();
+                    //}
+                    return mWeibo.invite(5644315971L, Invitation.builder().text("Andrew Chen: Yo SimpleWeibo!").url("https://github.com/8tory/SimpleWeibo").logo("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png").build()).map(resp -> {
+                            RxCard card = new RxCard();
+                            card.icon = Observable.just("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png");
+                            card.text1 = Observable.just(resp.errorCode() + ":" + resp.error() + ":" + "Andrew Chen: Yo SimpleWeibo!");
+                            card.message = Observable.just("https://github.com/8tory/SimpleWeibo");
+                            return card;
+                        });
+                }).doOnError(e -> e.printStackTrace()));
         }));
     }
 

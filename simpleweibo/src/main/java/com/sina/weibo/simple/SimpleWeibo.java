@@ -230,14 +230,14 @@ public abstract class SimpleWeibo {
     */
 
     @RetroWeibo.POST("/statuses/update.json")
-    public abstract Observable<Response> publishStatus(
+    public abstract Observable<Status> publishStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("long") double longtitude,
         @RetroWeibo.Query("lat") double latitude
     );
 
     @RetroWeibo.POST("/statuses/upload.json")
-    public abstract Observable<Response> publishStatus(
+    public abstract Observable<Status> publishStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("pic") Bitmap picture,
         @RetroWeibo.Query("long") double longtitude,
@@ -245,7 +245,7 @@ public abstract class SimpleWeibo {
     );
 
     @RetroWeibo.POST("/statuses/upload_url_text.json")
-    public abstract Observable<Response> publishStatus(
+    public abstract Observable<Status> publishStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("url") String pictureUrl,
         @RetroWeibo.Query("pic_id") String pictureId,
@@ -253,7 +253,7 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("lat") double latitude
     );
 
-    public Observable<Response> publishStatus(
+    public Observable<Status> publishStatus(
         String content,
         String pictureUrl,
         double longtitude,
@@ -263,36 +263,36 @@ public abstract class SimpleWeibo {
     }
 
     @RetroWeibo.POST("/comments/create.json")
-    public abstract Observable<Response> publishComment(
+    public abstract Observable<Comment> publishComment(
         @RetroWeibo.Query("comment") String comment,
         @RetroWeibo.Query("id") long id,
         @RetroWeibo.Query("comment_ori") boolean pingback
     );
 
-    public Observable<Response> publishComment(String comment, long id) {
+    public Observable<Comment> publishComment(String comment, long id) {
         return publishComment(comment, id, true);
     }
 
-    public Observable<Response> publishComment(String comment, Status status) {
+    public Observable<Comment> publishComment(String comment, Status status) {
         return publishComment(comment, status.id());
     }
 
-    public Observable<Response> publishComment(String comment, String id) {
+    public Observable<Comment> publishComment(String comment, String id) {
         return publishComment(comment, Long.valueOf(id));
     }
 
     @RetroWeibo.POST("/comments/destroy.json")
-    public abstract Observable<Response> deleteComment(
+    public abstract Observable<Comment> deleteComment(
         @RetroWeibo.Query("cid") long commentId
     );
 
     @RetroWeibo.POST("/comments/sdestroy_batch.json")
-    public abstract Observable<Response> deleteComments(
+    public abstract Observable<Comment> deleteComments(
         @RetroWeibo.Query("cids") long[] commentIds
     );
 
     @RetroWeibo.POST("/comments/reply.json")
-    public abstract Observable<Response> replyComment(
+    public abstract Observable<Comment> replyComment(
         @RetroWeibo.Query("comment") String comment,
         @RetroWeibo.Query("cid") long cid,
         @RetroWeibo.Query("id") long id,
@@ -300,35 +300,7 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("comment_ori") boolean pingback
     );
 
-    public Observable<Response> replyComment(
-        String comment,
-        String cid,
-        String id,
-        boolean withoutMention,
-        boolean pingback
-    ) {
-        return replyComment(
-            comment,
-            Long.valueOf(cid),
-            Long.valueOf(id),
-            withoutMention,
-            pingback
-        );
-    }
-
-    public Observable<Response> replyComment(
-        String comment,
-        String cid,
-        String id
-    ) {
-        return replyComment(
-            comment,
-            Long.valueOf(cid),
-            Long.valueOf(id)
-        );
-    }
-
-    public Observable<Response> replyComment(
+    public Observable<Comment> replyComment(
         String comment,
         long cid,
         long id
@@ -342,7 +314,7 @@ public abstract class SimpleWeibo {
         );
     }
 
-    public Observable<Response> replyComment(String comment, Comment parentComment) {
+    public Observable<Comment> replyComment(String comment, Comment parentComment) {
         return replyComment(comment, parentComment.id(), parentComment.status().id());
     }
 

@@ -255,6 +255,8 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         }
 
         private void request(int page, String cursor, RequestListener listener) {
+            android.util.Log.d("RetroWeibo", method);
+            android.util.Log.d("RetroWeibo", "url: " + url);
             params.put(COUNT, DEFAULT_LIMIT);
             params.put(PAGE, page);
             params.put(CURSOR, cursor);
@@ -319,7 +321,12 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     }
     private static void _put(WeiboParameters params, String key, Object value) {
         android.util.Log.d("RetroWeibo", key + ":" + value);
+        //try {
+            //JSONObject json = new JSONObject("" + value);
+            //params.put(key, json.toString());
+        //} catch (JSONException e) {
         params.put(key, value);
+        //}
     }
     private static void _put(WeiboParameters params, String key, Object[] values) {
         _put(params, key, TextUtils.join(",", values));

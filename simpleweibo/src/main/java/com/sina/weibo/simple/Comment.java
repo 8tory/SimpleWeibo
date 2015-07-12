@@ -29,7 +29,7 @@ public abstract class Comment implements android.os.Parcelable {
     public abstract String createdAt();
     @Nullable
     @AutoJson.Field
-    public abstract String id();
+    public abstract Long id();
     @Nullable
     @AutoJson.Field
     public abstract String mid();
@@ -105,7 +105,7 @@ public abstract class Comment implements android.os.Parcelable {
     @AutoJson.Builder
     public abstract static class Builder {
         public abstract Builder createdAt(String x);
-        public abstract Builder id(String x);
+        public abstract Builder id(Long x);
         public abstract Builder mid(String x);
         public abstract Builder idstr(String x);
         public abstract Builder text(String x);
@@ -139,7 +139,7 @@ public abstract class Comment implements android.os.Parcelable {
         return new AutoJson_Comment.Builder();
     }
 
-    public Observable<Response> comment(String comment) {
+    public Observable<Comment> comment(String comment) {
         return SimpleWeibo.get().replyComment(comment, this);
     }
 }

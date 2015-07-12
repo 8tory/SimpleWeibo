@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class User implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field
-    public abstract String id();
+    public abstract Long id();
     @Nullable
     @AutoJson.Field
     public abstract String idstr();
@@ -141,7 +141,7 @@ public abstract class User implements android.os.Parcelable {
 
     @AutoJson.Builder
     public abstract static class Builder {
-        public abstract Builder id(String x);
+        public abstract Builder id(Long x);
         public abstract Builder idstr(String x);
         public abstract Builder screenName(String x);
         public abstract Builder name(String x);
