@@ -63,7 +63,7 @@ public abstract class SimpleWeibo {
         );
     }
 
-    @RetroWeibo.GET("/mentions.json")
+    @RetroWeibo.GET("/statuses/mentions.json")
     public abstract Observable<Status> getMentionedStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
         @RetroWeibo.Query("max_id") long maxId,
