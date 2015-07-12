@@ -45,7 +45,7 @@ AndroidManifest.xml:
 
 ```xml
 <meta-data android:name="com.sina.weibo.sdk.ApplicationId" android:value="@string/weibo_app_id" />
-<meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" />
+<!-- Optional --> <meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" />
 ```
 
 Activity:
@@ -71,8 +71,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ## Add API using RetroWeibo
 
 Ready API:
-
-[SimpleWeibo.java](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java):
 
 ```java
     @GET("/statuses/friends_timeline.json")
@@ -205,6 +203,9 @@ Ready API:
     @GET("/comments/show_batch.json")
     public abstract Observable<Comment> getBatchComments(@Query("cids") long[] cids);
 ```
+
+[More ready APIs](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java):
+
 
 Add Model: [Status.java](simpleweibo/src/main/java/com/sina/weibo/simple/Status.java):
 
