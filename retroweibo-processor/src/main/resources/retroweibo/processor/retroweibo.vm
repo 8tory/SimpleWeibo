@@ -59,6 +59,7 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
 
     private static final String ACCESS_TOKEN = "access_token"; // AbsOpenAPI.KEY_ACCESS_TOKEN
     private static final String HTTPS_WEIBO_API_2 = "https://api.weibo.com/2"; // AbsOpenAPI.API_SERVER
+    private static final String HTTPS_WEIBO_API = "https://api.weibo.com";
     private static final String GET = "GET";  // AbsOpenAPI.HTTPMETHOD_GET
     private static final String POST = "POST";
     private static final String DELETE = "DELETE";
@@ -166,17 +167,25 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
         }).flatMap(new Func1<WeiboParameters, Observable<String>>() {
             @Override public Observable<String> call(WeiboParameters params) {
 
+                String prefix = HTTPS_WEIBO_API_2;
+
+                if (${p.path}.startsWith("http")) prefix = "";
+
 #if ($p.get)
 
-                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, GET));
+                return Observable.create(new OnSubscribeWeibo(context, prefix + ${p.path}, params, GET));
 
 #elseif ($p.post)
 
-                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, POST));
+                if (${p.path}.startsWith("/oauth2")) {
+                    return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API + ${p.path}, params, POST));
+                } else {
+                    return Observable.create(new OnSubscribeWeibo(context, prefix + ${p.path}, params, POST));
+                }
 
 #elseif ($p.delete)
 
-                return Observable.create(new OnSubscribeWeibo(context, HTTPS_WEIBO_API_2 + ${p.path}, params, DELETE));
+                return Observable.create(new OnSubscribeWeibo(context, prefix + ${p.path}, params, DELETE));
 #end
 
             }
@@ -315,6 +324,14 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
     private static void _put(WeiboParameters params, String key, Object[] values) {
         _put(params, key, TextUtils.join(",", values));
     }
+    /*
+    private static void _put(WeiboParameters params, String key, float value) {
+        _put(params, key, String.valueOf(value));
+    }
+    private static void _put(WeiboParameters params, String key, double value) {
+        _put(params, key, String.valueOf(value));
+    }
+    */
 
     private Observable<AccessToken> _logIn() {
         return logInWithPermissions(

@@ -39,6 +39,7 @@ import rx.functions.*;
 import rx.Subscriber;
 
 import retroweibo.RetroWeibo;
+import android.graphics.Bitmap;
 
 @RetroWeibo
 public abstract class SimpleWeibo {
@@ -212,11 +213,86 @@ public abstract class SimpleWeibo {
     }
 
     @RetroWeibo.GET("/comments/show_batch.json")
-    public abstract Observable<Comment> getBatchComments(@RetroWeibo.Query("cids") long[] cids);
+    public abstract Observable<Comment> getComments(@RetroWeibo.Query("cids") long[] commentIds);
 
     @RetroWeibo.POST("/messages/invite.json")
     //public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Body("data") Invitation invitation);
     public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Query("data") Invitation invitation);
+
+    /*
+    @RetroWeibo.POST("/statuses/update.json")
+    public abstract Observable<Response> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("long") String longtitude,
+        @RetroWeibo.Query("lat") String latitude
+    );
+    */
+
+    @RetroWeibo.POST("/statuses/update.json")
+    public abstract Observable<Response> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    @RetroWeibo.POST("/statuses/upload.json")
+    public abstract Observable<Response> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("pic") Bitmap picture,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    @RetroWeibo.POST("/statuses/upload_url_text.json")
+    public abstract Observable<Response> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("url") String pictureUrl,
+        @RetroWeibo.Query("pic_id") String pictureId,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    public Observable<Response> publishStatus(
+        String content,
+        String pictureUrl,
+        double longtitude,
+        double latitude
+    ) {
+        return publishStatus(content, pictureUrl, null, longtitude, latitude);
+    }
+
+    @RetroWeibo.POST("/comments/create.json")
+    public abstract Observable<Response> publishComment(
+        @RetroWeibo.Query("comment") String comment,
+        @RetroWeibo.Query("id") long id,
+        @RetroWeibo.Query("comment_ori") boolean pingback
+    );
+
+    @RetroWeibo.POST("/comments/destroy.json")
+    public abstract Observable<Response> deleteComment(
+        @RetroWeibo.Query("cid") long commentId
+    );
+
+    @RetroWeibo.POST("/comments/sdestroy_batch.json")
+    public abstract Observable<Response> deleteComments(
+        @RetroWeibo.Query("cids") long[] commentIds
+    );
+
+    @RetroWeibo.POST("/comments/reply.json")
+    public abstract Observable<Response> replyComment(
+        @RetroWeibo.Query("comment") String comment,
+        @RetroWeibo.Query("cid") long cid,
+        @RetroWeibo.Query("id") long id,
+        @RetroWeibo.Query("without_mention") boolean withoutMention,
+        @RetroWeibo.Query("comment_ori") boolean pingback
+    );
+
+    @RetroWeibo.POST("/oauth2/revokeoauth2")
+    public abstract Observable<Response> revoke();
+
+    public Observable<Response> logOut() {
+        return revoke();
+    }
 
     private Activity activity;
     private Context context;
