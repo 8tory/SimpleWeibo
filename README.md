@@ -204,7 +204,7 @@ Ready API:
     public abstract Observable<Comment> getBatchComments(@Query("cids") long[] cids);
 ```
 
-[More ready APIs](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java):
+[More ready APIs ..](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java)
 
 
 Add Model: [Status.java](simpleweibo/src/main/java/com/sina/weibo/simple/Status.java):
