@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupAdapter(Adapter adapter) {
         adapter.fragments.add(FragmentPage.create().title("Home").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().take(32).map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Notifications").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().take(32).map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Discover").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getStatuses().take(32).map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Me").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().take(32).map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("getMentionedStatuses").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().map(status -> {
+                .items(Observable.defer(() -> mWeibo.getMentionedStatuses().take(32).map(status -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(status.user().avatarLarge());
                     card.text1 = Observable.just(status.user().screenName());
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Users").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUsersByName("yongjhih").map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersByName("yongjhih").take(32).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("User").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUsersById(5647447265L).map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersById(5647447265L).take(32).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("Domain").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUsersByDomain("yongjhih").map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersByDomain("yongjhih").take(32).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("UserCount").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getUsersCount(new long[]{5647447265L, 5644315971L}).map(user -> {
+                .items(Observable.defer(() -> mWeibo.getUsersCount(new long[]{5647447265L, 5644315971L}).take(32).map(user -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(user.avatarLarge());
                     card.text1 = Observable.just(user.screenName());
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("getComments").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getComments().map(comment -> {
+                .items(Observable.defer(() -> mWeibo.getComments().take(32).map(comment -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(comment.user().avatarLarge());
                     card.text1 = Observable.just(comment.user().screenName());
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("getCommentsByMe").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getCommentsByMe().map(comment -> {
+                .items(Observable.defer(() -> mWeibo.getCommentsByMe().take(32).map(comment -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(comment.user().avatarLarge());
                     card.text1 = Observable.just(comment.user().screenName());
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("getCommentsToMe").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getCommentsToMe().map(comment -> {
+                .items(Observable.defer(() -> mWeibo.getCommentsToMe().take(32).map(comment -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(comment.user().avatarLarge());
                     card.text1 = Observable.just(comment.user().screenName());
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
         }));
         adapter.fragments.add(FragmentPage.create().title("getMentionedComments").fragment(() -> {
             return RxCardsFragment.create()
-                .items(Observable.defer(() -> mWeibo.getMentionedComments().map(comment -> {
+                .items(Observable.defer(() -> mWeibo.getMentionedComments().take(32).map(comment -> {
                     RxCard card = new RxCard();
                     card.icon = Observable.just(comment.user().avatarLarge());
                     card.text1 = Observable.just(comment.user().screenName());
