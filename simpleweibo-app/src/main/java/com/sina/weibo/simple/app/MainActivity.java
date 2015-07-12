@@ -265,6 +265,16 @@ public class MainActivity extends AppCompatActivity {
                     return card;
                 })).doOnError(e -> e.printStackTrace()));
         }));
+        adapter.fragments.add(FragmentPage.create().title("Invite").fragment(() -> {
+            return RxCardsFragment.create()
+                .items(Observable.defer(() -> mWeibo.invite(5644315971L, Invitation.builder().text("Andrew Chen: Yo SimpleWeibo!").url("https://github.com/8tory/SimpleWeibo").logo("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png").build()).map(resp -> {
+                    RxCard card = new RxCard();
+                    card.icon = Observable.just("https://raw.githubusercontent.com/8tory/SimpleWeibo/master/art/SimpleWeibo.png");
+                    card.text1 = Observable.just(resp.errorCode() + ":" + resp.error() + ":" + "Andrew Chen: Yo SimpleWeibo!");
+                    card.message = Observable.just("https://github.com/8tory/SimpleWeibo");
+                    return card;
+                })).doOnError(e -> e.printStackTrace()));
+        }));
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

@@ -87,6 +87,7 @@ public @interface RetroWeibo {
   @Retention(RetentionPolicy.RUNTIME) // RUNTIME, keep annotation for anothor processor
   @Target(ElementType.PARAMETER)
   public @interface Body {
+    String value() default "";
   }
 
   public static interface Callback<T> {

@@ -2,3 +2,7 @@ include 'retroweibo'
 include 'retroweibo-processor'
 include 'simpleweibo'
 include 'simpleweibo-app'
+//include ':auto-json-processor'
+//project(':auto-json-processor').projectDir = new File(settingsDir, '../AutoJson/auto-json-processor')
+//include ':auto-json'
+//project(':auto-json').projectDir = new File(settingsDir, '../AutoJson/auto-json')

@@ -16,6 +16,7 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.github.dcendents.android-maven'
+apply from: 'deploy.gradle'
 
 android {
     compileSdkVersion 22
@@ -68,8 +69,9 @@ dependencies {
 
     compile 'com.infstory:proguard-snippets:1.0.0'
 
-    compile 'com.infstory:auto-json:1.0.1'
-    apt 'com.infstory:auto-json-processor:1.0.1'
+    compile 'com.infstory:auto-json:1.0.2'
+    apt 'com.infstory:auto-json-processor:1.0.2'
+    //apt project(':auto-json-processor')
 
     compile project(':retroweibo')
     apt project(':retroweibo-processor')

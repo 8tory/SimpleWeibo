@@ -214,6 +214,10 @@ public abstract class SimpleWeibo {
     @RetroWeibo.GET("/comments/show_batch.json")
     public abstract Observable<Comment> getBatchComments(@RetroWeibo.Query("cids") long[] cids);
 
+    @RetroWeibo.POST("/messages/invite.json")
+    //public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Body("data") Invitation invitation);
+    public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Query("data") Invitation invitation);
+
     private Activity activity;
     private Context context;
     private String appId;
