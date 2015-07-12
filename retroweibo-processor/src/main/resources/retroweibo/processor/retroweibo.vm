@@ -261,7 +261,7 @@ public final class $subclass$formalTypes extends $origClass$actualTypes {
             new AsyncWeiboRunner(context).requestAsync(
                 url,
                 params,
-                GET,
+                method,
                 listener
             );
         }

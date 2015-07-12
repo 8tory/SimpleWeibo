@@ -215,7 +215,8 @@ public abstract class SimpleWeibo {
     @RetroWeibo.GET("/comments/show_batch.json")
     public abstract Observable<Comment> getComments(@RetroWeibo.Query("cids") long[] commentIds);
 
-    @RetroWeibo.POST("/messages/invite.json")
+    //@RetroWeibo.POST("/messages/invite.json")
+    @RetroWeibo.POST("https://m.api.weibo.com/2/messages/invite.json")
     //public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Body("data") Invitation invitation);
     public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Query("data") Invitation invitation);
 
