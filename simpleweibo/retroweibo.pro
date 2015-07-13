@@ -1,0 +1,2 @@
+-keep @retroweibo.RetroWeibo class *
+-dontwarn retroweibo.**

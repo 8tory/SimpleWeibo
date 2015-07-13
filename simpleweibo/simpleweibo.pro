@@ -1,0 +1,2 @@
+-keep class com.sina.weibo.simple.** { *; }
+-dontwarn com.sina.weibo.simple.**
