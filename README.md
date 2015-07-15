@@ -1,5 +1,6 @@
 # SimpleWeibo
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SimpleWeibo-green.svg?style=flat)](https://android-arsenal.com/details/1/2139)
 [![Download](https://api.bintray.com/packages/8tory/maven/SimpleWeibo/images/download.svg)](https://bintray.com/8tory/maven/SimpleWeibo/_latestVersion)
 [![JitPack](https://img.shields.io/github/tag/8tory/SimpleWeibo.svg?label=JitPack)](https://jitpack.io/#8tory/SimpleWeibo)
 [![Build Status](https://travis-ci.org/8tory/SimpleWeibo.svg)](https://travis-ci.org/8tory/SimpleWeibo)
