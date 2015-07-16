@@ -38,7 +38,7 @@ weibo.logIn().subscribe();
 logInWithPermissions:
 
 ```java
-weibo.logInWithPermissions(Arrays.asList("email", "statuses_to_me_read")).subscribe();
+weibo.logInWithPermissions("email", "statuses_to_me_read").subscribe();
 ```
 
 ## Integration
