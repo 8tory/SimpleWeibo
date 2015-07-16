@@ -17,6 +17,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'hugo'
 apply plugin: 'com.neenbedankt.android-apt'
+apply from: 'deploy.gradle'
 
 android {
     compileSdkVersion 22
