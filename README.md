@@ -338,7 +338,7 @@ dependencies {
 }
 ```
 
-via jcenter(in progress):
+via jcenter:
 
 ```gradle
 repositories {
