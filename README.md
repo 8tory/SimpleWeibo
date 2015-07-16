@@ -16,7 +16,7 @@ Simple Weibo SDK turns Weibo API into a Java interface with RxJava.
 
 [#Demo](#demo)
 
-![](art/screenshot-timeline.png)
+[![](art/screenshot-timeline.png)](#demo)
 
 ## Usage
 
