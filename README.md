@@ -204,6 +204,99 @@ Ready API:
 
     @GET("/comments/show_batch.json")
     public abstract Observable<Comment> getBatchComments(@Query("cids") long[] cids);
+    
+    @RetroWeibo.POST("https://m.api.weibo.com/2/messages/invite.json")
+    public abstract Observable<Response> invite(@RetroWeibo.Query("uid") long uid, @RetroWeibo.Query("data") Invitation invitation);
+
+    @RetroWeibo.POST("/statuses/update.json")
+    public abstract Observable<Status> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    @RetroWeibo.POST("/statuses/upload.json")
+    public abstract Observable<Status> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("pic") Bitmap picture,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    @RetroWeibo.POST("/statuses/upload_url_text.json")
+    public abstract Observable<Status> publishStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("url") String pictureUrl,
+        @RetroWeibo.Query("pic_id") String pictureId,
+        @RetroWeibo.Query("long") double longtitude,
+        @RetroWeibo.Query("lat") double latitude
+    );
+
+    public Observable<Status> publishStatus(
+        String content,
+        String pictureUrl,
+        double longtitude,
+        double latitude
+    ) {
+        // ...
+    }
+
+    @RetroWeibo.POST("/comments/create.json")
+    public abstract Observable<Comment> publishComment(
+        @RetroWeibo.Query("comment") String comment,
+        @RetroWeibo.Query("id") long id,
+        @RetroWeibo.Query("comment_ori") boolean pingback
+    );
+
+    public Observable<Comment> publishComment(String comment, long id) {
+        // ...
+    }
+
+    public Observable<Comment> publishComment(String comment, Status status) {
+        // ...
+    }
+
+    public Observable<Comment> publishComment(String comment, String id) {
+        // ...
+    }
+
+    @RetroWeibo.POST("/comments/destroy.json")
+    public abstract Observable<Comment> deleteComment(
+        @RetroWeibo.Query("cid") long commentId
+    );
+
+    @RetroWeibo.POST("/comments/sdestroy_batch.json")
+    public abstract Observable<Comment> deleteComments(
+        @RetroWeibo.Query("cids") long[] commentIds
+    );
+
+    @RetroWeibo.POST("/comments/reply.json")
+    public abstract Observable<Comment> replyComment(
+        @RetroWeibo.Query("comment") String comment,
+        @RetroWeibo.Query("cid") long cid,
+        @RetroWeibo.Query("id") long id,
+        @RetroWeibo.Query("without_mention") boolean withoutMention,
+        @RetroWeibo.Query("comment_ori") boolean pingback
+    );
+
+    public Observable<Comment> replyComment(
+        String comment,
+        long cid,
+        long id
+    ) {
+        // ...
+    }
+
+    public Observable<Comment> replyComment(String comment, Comment parentComment) {
+        // ...
+    }
+
+    @RetroWeibo.POST("/oauth2/revokeoauth2")
+    public abstract Observable<Response> revoke();
+
+    public Observable<Response> logOut() {
+        // ...
+    }
 ```
 
 [More ready APIs ..](simpleweibo/src/main/java/com/sina/weibo/simple/SimpleWeibo.java)
