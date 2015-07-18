@@ -73,6 +73,8 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 ## Add API using RetroWeibo
 
+[![javadoc](https://img.shields.io/badge/javadoc-1.0.2-blue.svg?label=javadoc)](https://jitpack.io/com/github/8tory/SimpleWeibo/simpleweibo/1.0.2/javadoc/com/sina/weibo/simple/SimpleWeibo.html#method.summary)
+
 Ready API:
 
 ```java
