@@ -48,7 +48,7 @@ AndroidManifest.xml:
 
 ```xml
 <meta-data android:name="com.sina.weibo.sdk.ApplicationId" android:value="@string/weibo_app_id" />
-<!-- Optional --> <meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" />
+<meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" /> <!-- Optional -->
 ```
 
 Activity:
