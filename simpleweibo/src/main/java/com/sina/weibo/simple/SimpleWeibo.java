@@ -45,6 +45,14 @@ import android.graphics.Bitmap;
 public abstract class SimpleWeibo {
 
     @RetroWeibo.GET("/statuses/friends_timeline.json")
+    public abstract Observable<Status> getFriendStatuses(
+            @RetroWeibo.Query("since_id") long sinceId,
+            @RetroWeibo.Query("max_id") long maxId,
+            @RetroWeibo.Query("base_app") boolean baseApp,
+            @RetroWeibo.Query("trim_user") boolean trimUser,
+            @RetroWeibo.Query("feature") int featureType
+    );
+    @RetroWeibo.GET("/statuses/user_timeline.json")
     public abstract Observable<Status> getStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
         @RetroWeibo.Query("max_id") long maxId,
