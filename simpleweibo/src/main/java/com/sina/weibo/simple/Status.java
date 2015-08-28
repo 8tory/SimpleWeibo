@@ -20,16 +20,14 @@ import auto.json.AutoJson;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Date;
 import rx.Observable;
 
-/**
- * @see http://t.cn/zjM1a2W
- */
 @AutoJson
 public abstract class Status implements android.os.Parcelable {
     @Nullable
-    @AutoJson.Field(name = "created_at")
-    public abstract String createdAt();
+    @AutoJson.Field(name = "created_at", typeConverter = WeiboDateConverter.class)
+    public abstract Date createdAt();
     @Nullable
     @AutoJson.Field
     public abstract Long id();
@@ -101,7 +99,7 @@ public abstract class Status implements android.os.Parcelable {
 
     @AutoJson.Builder
     public abstract static class Builder {
-        public abstract Builder createdAt(String x);
+        public abstract Builder createdAt(Date x);
         public abstract Builder id(Long x);
         public abstract Builder mid(String x);
         public abstract Builder idstr(String x);
