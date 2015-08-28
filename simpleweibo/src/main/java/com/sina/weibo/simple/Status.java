@@ -89,10 +89,10 @@ public abstract class Status implements android.os.Parcelable {
     @Nullable
     @AutoJson.Field(name = "mlevel")
     public abstract int level();
+
     @Nullable
     @AutoJson.Field
-    //public abstract Visible visible();
-    public abstract boolean visible(); // TODO
+    public abstract Visible visible();
     @Nullable
     @AutoJson.Field(name = "pic_urls")
     public abstract List<String> picUrls();
@@ -121,8 +121,7 @@ public abstract class Status implements android.os.Parcelable {
         public abstract Builder commentsCount(int x);
         public abstract Builder attitudesCount(int x);
         public abstract Builder level(int x);
-        //public abstract Builder visible(Visible x);
-        public abstract Builder visible(boolean x); // TODO
+        public abstract Builder visible(Visible x);
         public abstract Builder picUrls(List<String> x);
 
         public abstract Status build();
