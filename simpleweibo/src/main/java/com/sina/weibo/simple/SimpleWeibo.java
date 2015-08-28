@@ -386,6 +386,11 @@ public abstract class SimpleWeibo {
         return logInWithPermissions(Arrays.asList(permissions));
     }
 
+    public boolean isLogin() {
+        if (accessToken == null) accessToken = AccessTokenPreferences.create(context);
+        return accessToken.token() != null && !"".equals(accessToken.token());
+    }
+
     public Observable<AccessToken> logInWithPermissions(final Collection<String> permissions) {
         if (accessToken == null) accessToken = AccessTokenPreferences.create(context);
 
