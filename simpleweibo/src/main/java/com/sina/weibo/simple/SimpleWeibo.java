@@ -71,6 +71,16 @@ public abstract class SimpleWeibo {
         );
     }
 
+    public Observable<Status> getPictureStatuses() {
+        return getStatuses(
+            UNKNOWN_SINCE_ID,
+            UNKNOWN_MAX_ID,
+            NOT_APP_ONLY,
+            NOT_TRIM_USER,
+            FEATURE_PICTURE
+        );
+    }
+
     @RetroWeibo.GET("/statuses/mentions.json")
     public abstract Observable<Status> getMentionedStatuses(
         @RetroWeibo.Query("since_id") long sinceId,
