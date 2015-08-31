@@ -578,10 +578,6 @@ public abstract class SimpleWeibo {
     public static final long UNKNOWN_MAX_ID = 0L;
     public static final long UNKNOWN_SINCE_ID = 0L;
 
-    public void share(String text, Bitmap bitmap) {
-        share(activity, text, bitmap);
-    }
-
     private IWeiboShareAPI mWeiboShareAPI;
     private Subject<BaseResponse, BaseResponse> shareSubject;
 
@@ -661,6 +657,8 @@ public abstract class SimpleWeibo {
         mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(activity, authInfo.getAppKey()); // appId
         mWeiboShareAPI.registerApp();
 
-        mWeiboShareAPI.handleWeiboResponse(activity.getIntent(), response);
+        if (savedInstanceState != null) {
+            mWeiboShareAPI.handleWeiboResponse(activity.getIntent(), response);
+        }
     }
 }
