@@ -27,6 +27,7 @@ import com.sina.weibo.sdk.auth.sso.*;
 import com.sina.weibo.sdk.exception.*;
 import com.sina.weibo.sdk.api.*;
 import com.sina.weibo.sdk.api.share.*;
+import com.sina.weibo.sdk.constant.WBConstants;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -607,26 +608,29 @@ public abstract class SimpleWeibo {
         request.transaction = String.valueOf(System.currentTimeMillis());
         request.multiMessage = weiboMessage;
 
-        shareSubject = PublishSubject.create();
-
         /*
         mWeiboShareAPI.sendRequest(activity, request); // FIXME Should return shareObs before sendRequest()
         */
 
-        mWeiboShareAPI.sendRequest(activity, request, authInfo, accessToken.token(), new WeiboAuthListener() {
-            @Override public void onComplete(Bundle values) {
-                android.util.Log.d("SimpleWeibo", "values: " + values);
-            }
-            @Override public void onCancel() {
-                android.util.Log.d("SimpleWeibo", "onCancel");
-            }
-            @Override public void onWeiboException(WeiboException e) {
-                android.util.Log.e("SimpleWeibo", "onError");
-                e.printStackTrace();
+        return Observable.defer(new Func0<Observable<BaseResponse>>() {
+            @Override public Observable<BaseResponse> call() {
+                shareSubject = PublishSubject.create();
+
+                mWeiboShareAPI.sendRequest(activity, request, authInfo, accessToken.token(), new WeiboAuthListener() {
+                    @Override public void onComplete(Bundle values) {
+                        android.util.Log.d("SimpleWeibo", "values: " + values);
+                    }
+                    @Override public void onCancel() {
+                        android.util.Log.d("SimpleWeibo", "onCancel");
+                    }
+                    @Override public void onWeiboException(WeiboException e) {
+                        android.util.Log.e("SimpleWeibo", "onError");
+                        e.printStackTrace();
+                    }
+                });
+                return shareSubject.asObservable();
             }
         });
-
-        return shareSubject.asObservable();
     }
 
     // FIXME synchronized mWeiboShareAPI
@@ -642,8 +646,14 @@ public abstract class SimpleWeibo {
      * @param BaseResponse baseResponse baseResponse.errCode
      */
     public void onResponse(BaseResponse baseResponse) {
-        shareSubject.onNext(baseResponse);
-        shareSubject.onCompleted();
+        if (baseResponse.errCode == WBConstants.ErrorCode.ERR_FAIL) {
+            shareSubject.onError(new RuntimeException(baseResponse.errMsg));
+        } else if (baseResponse.errCode == WBConstants.ErrorCode.ERR_CANCEL) {
+            shareSubject.onCompleted();
+        } else {
+            shareSubject.onNext(baseResponse);
+            shareSubject.onCompleted();
+        }
     }
 
     // FIXME synchronized mWeiboShareAPI
