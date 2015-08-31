@@ -25,6 +25,8 @@ import java.util.Collection;
 import com.sina.weibo.sdk.auth.*;
 import com.sina.weibo.sdk.auth.sso.*;
 import com.sina.weibo.sdk.exception.*;
+import com.sina.weibo.sdk.api.*;
+import com.sina.weibo.sdk.api.share.*;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -37,6 +39,8 @@ import android.content.pm.ApplicationInfo;
 import rx.Observable;
 import rx.functions.*;
 import rx.Subscriber;
+import rx.subjects.Subject;
+import rx.subjects.PublishSubject;
 
 import retroweibo.RetroWeibo;
 import android.graphics.Bitmap;
@@ -394,6 +398,7 @@ public abstract class SimpleWeibo {
     private SsoHandler ssoHandler;
     private static SimpleWeibo self;
     private AccessToken accessToken;
+    private AuthInfo authInfo;
 
     public static final String APPLICATION_ID_PROPERTY = "com.sina.weibo.sdk.ApplicationId";
     public static final String REDIRECT_URL_PROPERTY = "com.sina.weibo.sdk.RedirectUrl";
@@ -415,13 +420,19 @@ public abstract class SimpleWeibo {
         // null ? throw new IllegalArgumentException()
         this.redirectUrl = getMetaData(activity, REDIRECT_URL_PROPERTY);
         if (this.redirectUrl == null || "".equals(this.redirectUrl)) this.redirectUrl = DEFAULT_REDIRECT_URL;
+        this.authInfo = new AuthInfo(context, appId, redirectUrl, TextUtils.join(",", Arrays.asList("email")));
+        this.accessToken = AccessTokenPreferences.create(activity);
 
-        ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl, TextUtils.join(",", Arrays.asList("email"))));
+        ssoHandler = new SsoHandler(activity, authInfo);
         return this;
     }
 
     public String getAppId() {
         return appId;
+    }
+
+    public AuthInfo getAuthInfo() {
+        return authInfo;
     }
 
     public Observable<AccessToken> logIn() {
@@ -454,8 +465,9 @@ public abstract class SimpleWeibo {
             }
         }
 
-        ssoHandler = new SsoHandler(activity, new AuthInfo(context, appId, redirectUrl,
-                TextUtils.join(",", permissions)));
+        authInfo = new AuthInfo(context, appId, redirectUrl,
+                TextUtils.join(",", permissions));
+        ssoHandler = new SsoHandler(activity, authInfo);
         return logInForOauth2AccessToken(permissions).map(new Func1<Oauth2AccessToken, AccessToken>() {
             @Override public AccessToken call(Oauth2AccessToken oauth2) {
                 accessToken.uid(oauth2.getUid());
@@ -565,4 +577,80 @@ public abstract class SimpleWeibo {
     public static final long UNKNOWN_MAX_ID = 0L;
     public static final long UNKNOWN_SINCE_ID = 0L;
 
+    public void share(String text, Bitmap bitmap) {
+        share(activity, text, bitmap);
+    }
+
+    private IWeiboShareAPI mWeiboShareAPI;
+    private Subject<BaseResponse, BaseResponse> shareSubject;
+
+    /**
+     * onCreate(Activity activity, Response response, Bundle savedInstanceState)
+     * onNewIntent(Response response, Intent intent)
+     * onResponse(BaseResponse baseResponse)
+     */
+    // FIXME synchronized mWeiboShareAPI
+    public synchronized Observable<BaseResponse> share(final Activity activity, String text, Bitmap bitmap) {
+        TextObject textObject = new TextObject();
+        textObject.text = text;
+
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+        weiboMessage.textObject = textObject;
+
+        if (bitmap != null) {
+            ImageObject imageObject = new ImageObject();
+            imageObject.setImageObject(bitmap);
+            weiboMessage.imageObject = imageObject;
+        }
+
+        final SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
+        request.transaction = String.valueOf(System.currentTimeMillis());
+        request.multiMessage = weiboMessage;
+
+        shareSubject = PublishSubject.create();
+
+        /*
+        mWeiboShareAPI.sendRequest(activity, request); // FIXME Should return shareObs before sendRequest()
+        */
+
+        mWeiboShareAPI.sendRequest(activity, request, authInfo, accessToken.token(), new WeiboAuthListener() {
+            @Override public void onComplete(Bundle values) {
+                android.util.Log.d("SimpleWeibo", "values: " + values);
+            }
+            @Override public void onCancel() {
+                android.util.Log.d("SimpleWeibo", "onCancel");
+            }
+            @Override public void onWeiboException(WeiboException e) {
+                android.util.Log.e("SimpleWeibo", "onError");
+                e.printStackTrace();
+            }
+        });
+
+        return shareSubject.asObservable();
+    }
+
+    // FIXME synchronized mWeiboShareAPI
+    public synchronized void onNewIntent(IWeiboHandler.Response response, Intent intent) {
+        mWeiboShareAPI.handleWeiboResponse(intent, response);
+    }
+
+    /**
+     * WBConstants.ErrorCode.ERR_OK
+     * WBConstants.ErrorCode.ERR_CANCEL
+     * WBConstants.ErrorCode.ERR_FAIL
+     *
+     * @param BaseResponse baseResponse baseResponse.errCode
+     */
+    public void onResponse(BaseResponse baseResponse) {
+        shareSubject.onNext(baseResponse);
+        shareSubject.onCompleted();
+    }
+
+    // FIXME synchronized mWeiboShareAPI
+    public synchronized void onCreate(Activity activity, IWeiboHandler.Response response, Bundle savedInstanceState) {
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(activity, authInfo.getAppKey()); // appId
+        mWeiboShareAPI.registerApp();
+
+        mWeiboShareAPI.handleWeiboResponse(activity.getIntent(), response);
+    }
 }
