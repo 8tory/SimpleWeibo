@@ -247,23 +247,67 @@ public abstract class SimpleWeibo {
     );
     */
 
+    /**
+     * @param source  (optional)   String  采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+     * @param access_token    (optional)   String  采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+     * @param status  (required)    String  要发布的微博文本内容，必须做URLencode，内容不超过140个汉字。
+     * @param visible (optional)   int     微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0。
+     * @param list_id (optional)   String  微博的保护投递指定分组ID，只有当visible参数为3时生效且必选。
+     * @param lat     (optional)   float   纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0。
+     * @param long    (optional)   float   经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0。
+     * @param annotations     (optional)   string  元数据，主要是为了方便第三方应用记录一些适合于自己使用的信息，每条微博可以包含一个或者多个元数据，必须以json字串的形式提交，字串长度不超过512个字符，具体内容可以自定。
+     * @param rip     (optional)   String  开发者上报的操作用户真实IP，形如：211.156.0.1。
+     * @see http://open.weibo.com/wiki/2/statuses/update
+     */
     @RetroWeibo.POST("/statuses/update.json")
     public abstract Observable<Status> publishStatus(
+        @RetroWeibo.Query("status") String content
+    );
+
+    @RetroWeibo.POST("/statuses/update.json")
+    public abstract Observable<Status> publishLocatedStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("long") double longtitude,
         @RetroWeibo.Query("lat") double latitude
     );
 
+    /**
+     * 發表圖片貼文.
+     *
+     * 類似 update ，僅多一項 Bitmap.
+     *
+     * @param source  (optional)   String  采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+     * @param access_token    (optional)   String  采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+     * @param status  (required)    String  要发布的微博文本内容，必须做URLencode，内容不超过140个汉字。
+     * @param visible (optional)   int     微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0。
+     * @param list_id (optional)   String  微博的保护投递指定分组ID，只有当visible参数为3时生效且必选。
+     * @param pic     (required)    Bitmap  要上传的图片，仅支持JPEG、GIF、PNG格式，图片大小小于5M。
+     * @param lat     (optional)   float   纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0。
+     * @param long    (optional)   float   经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0。
+     * @param annotations     (optional)   string  元数据，主要是为了方便第三方应用记录一些适合于自己使用的信息，每条微博可以包含一个或者多个元数据，必须以json字串的形式提交，字串长度不超过512个字符，具体内容可以自定。
+     * @param rip     (optional)   String  开发者上报的操作用户真实IP，形如：211.156.0.1。
+     *
+     * @see http://open.weibo.com/wiki/2/statuses/upload
+     */
     @RetroWeibo.POST("/statuses/upload.json")
-    public abstract Observable<Status> publishStatus(
+    public abstract Observable<Status> publishPhotoStatus(
+        @RetroWeibo.Query("status") String content,
+        @RetroWeibo.Query("pic") Bitmap picture
+    );
+
+    @RetroWeibo.POST("/statuses/upload.json")
+    public abstract Observable<Status> publishLocatedPhotoStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("pic") Bitmap picture,
         @RetroWeibo.Query("long") double longtitude,
         @RetroWeibo.Query("lat") double latitude
     );
 
+    /**
+     * High-level API
+     */
     @RetroWeibo.POST("/statuses/upload_url_text.json")
-    public abstract Observable<Status> publishStatus(
+    public abstract Observable<Status> publishPhotoUrlStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("url") String pictureUrl,
         @RetroWeibo.Query("pic_id") String pictureId,
@@ -271,13 +315,13 @@ public abstract class SimpleWeibo {
         @RetroWeibo.Query("lat") double latitude
     );
 
-    public Observable<Status> publishStatus(
+    public Observable<Status> publishPhotoUrlStatus(
         String content,
         String pictureUrl,
         double longtitude,
         double latitude
     ) {
-        return publishStatus(content, pictureUrl, null, longtitude, latitude);
+        return publishPhotoUrlStatus(content, pictureUrl, null, longtitude, latitude);
     }
 
     @RetroWeibo.POST("/comments/create.json")
