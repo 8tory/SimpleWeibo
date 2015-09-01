@@ -270,7 +270,7 @@ public abstract class SimpleWeibo {
     );
 
     @RetroWeibo.POST("/statuses/update.json")
-    public abstract Observable<Status> publishLocatedStatus(
+    public abstract Observable<Status> publishStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("long") double longtitude,
         @RetroWeibo.Query("lat") double latitude
@@ -301,7 +301,7 @@ public abstract class SimpleWeibo {
     );
 
     @RetroWeibo.POST("/statuses/upload.json")
-    public abstract Observable<Status> publishLocatedPhotoStatus(
+    public abstract Observable<Status> publishPhotoStatus(
         @RetroWeibo.Query("status") String content,
         @RetroWeibo.Query("pic") Bitmap picture,
         @RetroWeibo.Query("long") double longtitude,
