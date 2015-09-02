@@ -70,6 +70,46 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 }
 ```
 
+## Weibo Sharing
+
+Add intent-filter on caller activity:
+
+```xml
+<intent-filter>
+    <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+    <category android:name="android.intent.category.DEFAULT" />
+</intent-filter>
+```
+
+Though `onActivityResult(..)`, handle `onNewIntent(Intent)`, :
+
+```java
+public MainActivity extends Activity implements IWeiboHandler.Response {
+    SimpleWeibo weibo;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        weibo = SimpleWeibo.create(this);
+        weibo.onCreate(this, this, savedInstanceState);
+
+        // Bitmap bitmap = ...;
+        weibo.share(this, "Hello", bitmap).subscribe(baseResponse -> {});
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        weibo.onNewIntent(this, intent);
+    }
+    @Override
+    public void onResponse(BaseResponse baseResponse) {
+        weibo.onResponse(baseResponse);
+    }
+
+    ...
+}
+```
 
 ## Add API using RetroWeibo
 
