@@ -81,7 +81,7 @@ Add intent-filter on caller activity:
 </intent-filter>
 ```
 
-Though `onActivityResult(..)`, handle `onNewIntent(Intent)`, :
+Though `onActivityResult(..)`, handle `onCreate(Bundle)`, `onNewIntent(Intent)`, `onResponse(BaseResponse)` methods:
 
 ```java
 public MainActivity extends Activity implements IWeiboHandler.Response {
