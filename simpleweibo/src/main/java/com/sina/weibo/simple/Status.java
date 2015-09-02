@@ -69,8 +69,7 @@ public abstract class Status implements android.os.Parcelable {
     public abstract String originalPic();
     @Nullable
     @AutoJson.Field
-    //public abstract Geo geo(); // TODO
-    public abstract String geo();
+    public abstract Geo geo();
     @Nullable
     @AutoJson.Field
     public abstract User user();
@@ -113,8 +112,7 @@ public abstract class Status implements android.os.Parcelable {
         public abstract Builder thumbnailPic(String x);
         public abstract Builder middlePic(String x);
         public abstract Builder originalPic(String x);
-        //public abstract Builder geo(Geo x); // TODO
-        public abstract Builder geo(String x);
+        public abstract Builder geo(Geo x);
         public abstract Builder user(User x);
         public abstract Builder retweetedStatus(Status x);
         public abstract Builder repostsCount(int x);
