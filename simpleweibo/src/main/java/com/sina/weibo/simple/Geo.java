@@ -40,6 +40,8 @@ import rx.Observable;
  */
 @AutoJson
 public abstract class Geo implements android.os.Parcelable {
+    public static final String POINT = "Point";
+
     @Nullable
     @AutoJson.Field
     public abstract String type();
