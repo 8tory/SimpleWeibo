@@ -42,6 +42,54 @@ logInWithPermissions:
 weibo.logInWithPermissions("email", "statuses_to_me_read").subscribe();
 ```
 
+## Diff
+
+Using Weibo Core SDK:
+
+```java
+WeiboParameters params = new WeiboParameters(appId);
+params.put("access_token", accessToken); // AbsOpenAPI.KEY_ACCESS_TOKEN
+// put ...
+
+new AsyncWeiboRunner(context).requestAsync(
+  "https://api.weibo.com/2" + "/statuses/friends_timeline.json", // AbsOpenAPI.API_SERVER
+  params,
+  "GET", // AbsOpenAPI.HTTPMETHOD_GET
+  new RequestListener() {
+    @Override public void onComplete(String json) {
+    }
+    @Override public void onWeiboException(WeiboException e) {
+    }
+  }
+);
+```
+
+Using Weibo SDK:
+
+```java
+StatusesAPI statusesApi = new StatusesAPI(context, appId, accessToken);
+statusesApi.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
+    @Override public void onComplete(String json) {
+        StatusList statusList = StatusList.parse(response);
+        List<Status> statuses = statusList.statusList;
+        // statusAdapter.addAll(statuses);
+        // statusAdapter.notifyDataSetChanged();
+    }
+    @Override public void onWeiboException(WeiboException e) {
+    }
+  }
+);
+```
+
+After, using SimpleWeibo:
+
+```java
+SimpleWeibo.create(activity)
+           .getStatuses()
+           .take(10)
+           .forEach(System.out::println);
+```
+
 ## Integration
 
 AndroidManifest.xml:
