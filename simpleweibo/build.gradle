@@ -28,7 +28,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 18
         targetSdkVersion 22
         //versionName project.VERSION_NAME
         //versionCode Integer.parseInt(project.VERSION_CODE)
@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.infstory:weibo-android-sdk:3.1.2'
+    compile 'com.infstory:weibo-android-sdk:3.1.4'
 
     compile 'com.android.support:support-annotations:22.2.0'
 
