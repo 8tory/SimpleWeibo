@@ -39,7 +39,7 @@ android {
 
     defaultConfig {
         applicationId "com.sina.weibo.sdk.demo"
-        minSdkVersion 18
+        minSdkVersion 8
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
