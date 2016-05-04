@@ -92,11 +92,20 @@ SimpleWeibo.create(activity)
 
 ## Integration
 
+res/values/strings.xml
+
+```xml
+<string name="weibo_app_id" translatable="false">2045436852</string>
+<!-- Optional -->
+<string name="weibo_redirect_url" translatable="false">https://api.weibo.com/oauth2/default.html</string>
+```
+
 AndroidManifest.xml:
 
 ```xml
 <meta-data android:name="com.sina.weibo.sdk.ApplicationId" android:value="@string/weibo_app_id" />
-<meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" /> <!-- Optional -->
+<!-- Optional -->
+<meta-data android:name="com.sina.weibo.sdk.RedirectUrl" android:value="@string/weibo_redirect_url" />
 ```
 
 Activity:
