@@ -168,7 +168,7 @@ public MainActivity extends Activity implements IWeiboHandler.Response {
 }
 ```
 
-## Add API using RetroWeibo
+## Contribution of add API using RetroWeibo
 
 [![javadoc](https://img.shields.io/badge/javadoc-1.0.2-blue.svg?label=javadoc)](https://jitpack.io/com/github/8tory/SimpleWeibo/simpleweibo/1.0.2/javadoc/com/sina/weibo/simple/SimpleWeibo.html#method.summary)
 
