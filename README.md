@@ -1,14 +1,14 @@
 # SimpleWeibo
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SimpleWeibo-green.svg?style=flat)](https://android-arsenal.com/details/1/2139)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SimpleWeibo-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/2139)
 [![Download](https://api.bintray.com/packages/8tory/maven/SimpleWeibo/images/download.svg)](https://bintray.com/8tory/maven/SimpleWeibo/_latestVersion)
 [![JitPack](https://img.shields.io/github/tag/8tory/SimpleWeibo.svg?label=JitPack)](https://jitpack.io/#8tory/SimpleWeibo)
-[![javadoc](https://img.shields.io/github/tag/8tory/SimpleWeibo.svg?label=javadoc)](https://jitpack.io/com/github/8tory/SimpleWeibo/simpleweibo/1.0.2/javadoc/index.html)
+[![javadoc](https://img.shields.io/github/tag/8tory/SimpleWeibo.svg?label=javadoc)](https://jitpack.io/com/github/8tory/SimpleWeibo/-SNAPSHOT/javadoc/)
 [![Build Status](https://travis-ci.org/8tory/SimpleWeibo.svg)](https://travis-ci.org/8tory/SimpleWeibo)
-[![Join the chat at https://gitter.im/8tory/SimpleWeibo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/8tory/SimpleWeibo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter Chat](https://img.shields.io/gitter/room/8tory/SimpleWeibo.svg)](https://gitter.im/8tory/SimpleWeibo)
 
-[![](https://avatars0.githubusercontent.com/u/5761889?v=3&s=48)](https://github.com/Wendly)
-[![](https://avatars3.githubusercontent.com/u/213736?v=3&s=48)](https://github.com/yongjhih)
+[![](https://github.com/Wendly.png?size=48)](https://github.com/Wendly)
+[![](https://github.com/yongjhih?size=48)](https://github.com/yongjhih)
 Contributors..
 
 ![](art/SimpleWeibo.png)
